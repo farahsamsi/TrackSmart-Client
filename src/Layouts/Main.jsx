@@ -8,9 +8,7 @@ const Main = () => {
       {/* navbar */}
       <Navbar></Navbar>
 
-      <div
-      //   className="min-h-[calc(100vh-200px)]"
-      >
+      <div className="min-h-[calc(100vh-200px)] container mx-auto">
         <Outlet></Outlet>
       </div>
 

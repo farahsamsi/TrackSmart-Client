@@ -1,0 +1,112 @@
+import { Link } from "react-router-dom";
+import SectionTitle from "../../SharedComponents/SectionTitle";
+import loginImg from "../../assets/Social Images/login.png";
+import { useForm } from "react-hook-form";
+
+import useAuth from "../../Hooks/useAuth";
+
+const Login = () => {
+  const { login } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    login(data.email, data.password).then((res) => {
+      console.log("from login page", res.user);
+    });
+  };
+
+  return (
+    <div>
+      <SectionTitle
+        heading="Login to Your Account"
+        subHeading="Access your dashboard and stay on top of your inventory tasks effortlessly."
+      ></SectionTitle>
+      <div className="hero">
+        <div className="hero-content grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="text-center lg:text-left">
+            <img src={loginImg} alt="" />
+          </div>
+          <div className="card bg-base-100 w-full  shrink-0 shadow-2xl">
+            <form onSubmit={handleSubmit(onSubmit)} className="card-body">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Email</span>
+                </label>
+                <input
+                  {...register("email", { required: true })}
+                  type="email"
+                  placeholder="email"
+                  className="input input-bordered"
+                />
+                {errors.email && (
+                  <span className="text-red-700">Please enter your email</span>
+                )}
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Password</span>
+                </label>
+                <input
+                  {...register("password", { required: true, minLength: 6 })}
+                  type="password"
+                  placeholder="password"
+                  className="input input-bordered"
+                />
+                {errors.password?.type === "required" && (
+                  <span className="text-red-700">Please enter password</span>
+                )}
+                {errors.password?.type === "minLength" && (
+                  <span className="text-red-700">Password is too short</span>
+                )}
+                <label className="label">
+                  <a className="label-text-alt link link-hover">
+                    Forgot password?
+                  </a>
+                </label>
+              </div>
+              <div className="form-control mt-6">
+                <button type="submit" className="btn btn-primary">
+                  Login
+                </button>
+              </div>
+            </form>
+            <div className="divider"></div>
+            <div className="flex flex-col md:flex-row gap-4 justify-around items-center mb-6">
+              <div className="flex flex-col justify-center">
+                <p>Do not have an account ?</p>
+                <Link to="/register" className="btn">
+                  <button>Register</button>
+                </Link>
+              </div>
+              <div className="flex flex-col justify-center items-center">
+                <p>Or</p>
+                {/* <GoogleLogin></GoogleLogin> */}
+                <button
+                  //   onClick={googleLoginBtn}
+                  className="btn"
+                >
+                  <img
+                    width="48"
+                    height="48"
+                    src="https://img.icons8.com/color/48/google-logo.png"
+                    alt="google-logo"
+                  />
+                  Continue with Google
+                </button>
+              </div>
+
+              {/* <button onClick={handleLogOut} className="btn">Log out</button> */}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
