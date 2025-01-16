@@ -3,13 +3,13 @@ import SectionTitle from "../../../SharedComponents/SectionTitle";
 
 const About = () => {
   return (
-    <div>
+    <section className="pb-12">
       <SectionTitle
         heading="Manage Your Assets with TrackSmart"
         subHeading="Discover how we make it easy to manage, upload, and share files seamlessly, ensuring security and efficiency every step of the way."
       ></SectionTitle>
       <div>
-        <div className="pb-12">
+        <div>
           <div className="container mx-auto text-center">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 lg:gap-8 px-2">
               {/* Feature 1 */}
@@ -58,7 +58,7 @@ const About = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

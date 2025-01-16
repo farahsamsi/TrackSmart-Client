@@ -7,7 +7,7 @@ import employeeImage from "../../../assets/Home page images/joinAsEmployee.png";
 
 const Banner = () => {
   return (
-    <div className="min-h-[calc(100vh-900px)] ">
+    <section className="min-h-[calc(100vh-900px)] ">
       <Carousel autoPlay infiniteLoop>
         <div className="h-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6 lg:py-0">
@@ -61,7 +61,7 @@ const Banner = () => {
           </div>
         </div>
       </Carousel>
-    </div>
+    </section>
   );
 };
 
