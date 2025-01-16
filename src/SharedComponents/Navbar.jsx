@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import logo from "../assets/Home page images/logo.png";
 
 const Navbar = () => {
   const links = (
@@ -42,7 +43,10 @@ const Navbar = () => {
               {links}
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">TrackSmart</a>
+          <Link className="btn btn-ghost flex text-xl">
+            <img src={logo} alt="" />
+            TrackSmart
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{links}</ul>
