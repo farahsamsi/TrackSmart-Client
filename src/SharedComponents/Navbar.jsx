@@ -1,7 +1,37 @@
 import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/Home page images/logo.png";
+import useAuth from "../Hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Logout !",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout()
+          .then(() => {
+            Swal.fire({
+              title: "Logged Out!",
+              text: "You are logged out successfully.",
+              icon: "success",
+            });
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      }
+    });
+  };
+
   const links = (
     <>
       <li>
@@ -52,9 +82,40 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
         <div className="navbar-end">
-          <Link to="/login" className="btn">
-            Login
-          </Link>
+          {user ? (
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
+              >
+                <div className="w-20 rounded-full">
+                  <img alt="" src={user?.photoURL} />
+                </div>
+              </div>
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+              >
+                <li>
+                  <a className="justify-between">
+                    Profile
+                    <span className="badge">New</span>
+                  </a>
+                </li>
+                <li>
+                  <a>Settings</a>
+                </li>
+                <li onClick={handleLogout}>
+                  <a>Logout</a>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <Link to="/login" className="btn">
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </div>

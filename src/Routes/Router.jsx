@@ -5,9 +5,11 @@ import JoinAsEmployee from "../Pages/JoinForms/JoinAsEmployee";
 import JoinAsHR from "../Pages/JoinForms/JoinAsHR";
 import Login from "../Pages/JoinForms/Login";
 import Register from "../Pages/JoinForms/Register";
+import ErrorPage from "../SharedComponents/ErrorPage";
 
 const Router = createBrowserRouter([
   {
+    errorElement: <ErrorPage></ErrorPage>,
     path: "/",
     element: <Main></Main>,
     children: [

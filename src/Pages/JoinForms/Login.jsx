@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SectionTitle from "../../SharedComponents/SectionTitle";
 import loginImg from "../../assets/Social Images/login.png";
 import { useForm } from "react-hook-form";
 
 import useAuth from "../../Hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -14,10 +16,26 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-    login(data.email, data.password).then((res) => {
-      console.log("from login page", res.user);
-    });
+    // console.log(data);
+    login(data.email, data.password)
+      .then(() => {
+        // console.log("from login page", res.user);
+        navigate("/");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Welcome to TrackSmart",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `${err.message}`,
+        });
+      });
   };
 
   return (
