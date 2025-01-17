@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 
 import SectionTitle from "../../SharedComponents/SectionTitle";
 import { FaMoneyBill, FaUser } from "react-icons/fa";
+import { useState } from "react";
+import Payment from "../Payment/Payment";
 
 const JoinAsHR = () => {
   const {
@@ -11,8 +13,25 @@ const JoinAsHR = () => {
     formState: { errors },
   } = useForm();
 
+  const [hrInfo, setHrInfo] = useState(null);
+
+  // TODO : disable input fields when payment page is opened
+
   const onSubmit = (data) => {
-    console.log(data);
+    console.log(data.package);
+    let price = 0;
+
+    if (data.package === "starter") {
+      price = 5;
+    } else if (data.package === "premium") {
+      price = 8;
+    } else {
+      price = 15;
+    }
+    const HRInfo = { ...data, price };
+
+    console.log(HRInfo);
+    setHrInfo(HRInfo);
   };
   return (
     <div className="pb-9">
@@ -218,12 +237,17 @@ const JoinAsHR = () => {
               </div>
 
               <div className="form-control mt-6">
+                {/* <Link to="/payment"> */}
                 <button type="submit" className="btn btn-primary">
-                  Register
+                  Pay Now
                 </button>
+                {/* </Link> */}
               </div>
             </form>
           </div>
+
+          {/* payment component */}
+          {hrInfo && <Payment hrInfo={hrInfo}></Payment>}
         </div>
       </div>
     </div>

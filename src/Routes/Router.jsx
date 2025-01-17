@@ -7,6 +7,7 @@ import Login from "../Pages/JoinForms/Login";
 import Register from "../Pages/JoinForms/Register";
 import ErrorPage from "../SharedComponents/ErrorPage";
 import AllUsers from "../Pages/Admin/allUsers";
+import Payment from "../Pages/Payment/Payment";
 
 const Router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const Router = createBrowserRouter([
       {
         path: "register",
         element: <Register></Register>,
+      },
+      {
+        path: "payment",
+        element: <Payment></Payment>,
       },
 
       // admin routes
