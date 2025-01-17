@@ -34,6 +34,9 @@ const Router = createBrowserRouter([
         path: "register",
         element: <Register></Register>,
       },
+
+      // admin routes
+      // TODO: secure these
       {
         path: "allUsers",
         element: <AllUsers></AllUsers>,

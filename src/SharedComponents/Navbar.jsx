@@ -2,9 +2,12 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/Home page images/logo.png";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
+import useAdmin from "../Hooks/useAdmin";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
+  const [isAdmin] = useAdmin();
+  console.log(isAdmin);
 
   const handleLogout = () => {
     Swal.fire({
@@ -32,6 +35,17 @@ const Navbar = () => {
     });
   };
 
+  const adminLinks = (
+    <>
+      <li>
+        <NavLink to="/">Home</NavLink>
+      </li>
+      <li>
+        <NavLink to="/allUsers">All Users</NavLink>
+      </li>
+    </>
+  );
+
   const links = (
     <>
       <li>
@@ -43,13 +57,9 @@ const Navbar = () => {
       <li>
         <NavLink to="/joinAsHR">Join as HR Manager</NavLink>
       </li>
-      {user && (
-        <li>
-          <NavLink to="/allUsers">All Users</NavLink>
-        </li>
-      )}
     </>
   );
+
   return (
     <div className="sticky top-0 z-10 ">
       <div className="navbar bg-base-100 max-w-screen-xl mx-auto ">
@@ -75,7 +85,7 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
-              {links}
+              {isAdmin ? adminLinks : links}
             </ul>
           </div>
           <Link className="btn btn-ghost flex text-xl">
@@ -84,7 +94,9 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">{links}</ul>
+          <ul className="menu menu-horizontal px-1">
+            {isAdmin ? adminLinks : links}
+          </ul>
         </div>
         <div className="navbar-end">
           {user ? (
