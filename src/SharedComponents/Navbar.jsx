@@ -3,11 +3,13 @@ import logo from "../assets/Home page images/logo.png";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
 import useAdmin from "../Hooks/useAdmin";
+import useHR from "../Hooks/useHR";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const [isAdmin] = useAdmin();
-  const isHR = false;
+  const [isHR] = useHR();
+  // const isHR = false;
 
   const handleLogout = () => {
     Swal.fire({

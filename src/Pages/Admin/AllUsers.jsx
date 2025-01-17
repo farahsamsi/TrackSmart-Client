@@ -26,11 +26,9 @@ const AllUsers = () => {
       confirmButtonText: "Yes, Make HR!",
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(user._id);
         axiosSecure
           .patch(`/users/HR/${user._id}`)
           .then((res) => {
-            console.log(res.data);
             if (res.data.modifiedCount > 0) {
               refetch();
               Swal.fire({
@@ -99,8 +97,8 @@ const AllUsers = () => {
                   <td>{user?.name}</td>
                   <td>{user?.email}</td>
                   <td>
-                    {user.role === "admin" ? (
-                      "Admin"
+                    {user?.role ? (
+                      user?.role
                     ) : (
                       <button
                         onClick={() => handleMakeHR(user)}
