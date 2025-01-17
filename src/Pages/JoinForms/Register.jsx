@@ -4,39 +4,48 @@ import registerImg from "../../assets/Social Images/register.png";
 import useAuth from "../../Hooks/useAuth";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import GoogleLogin from "./GoogleLogin";
 
 // const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 // const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const Register = () => {
+  const axiosPublic = useAxiosPublic();
   const { createUser, updateUserProfile } = useAuth();
   const navigate = useNavigate();
 
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
+    // create user
     createUser(data.email, data.password)
       .then(() => {
-        // const loggedUser = result.user;
-        navigate("/");
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Welcome to TrackSmart",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
+        //  profile update
         updateUserProfile(data.name, data.photoURL).then(() => {
           const userInfo = {
             name: data.name,
             email: data.email,
           };
-          console.log("user info", userInfo);
+          // save user in DB
+          axiosPublic.post("/users", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              navigate("/");
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Welcome to TrackSmart",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              reset();
+            }
+          });
         });
       })
       .catch((err) => {
@@ -145,19 +154,7 @@ const Register = () => {
               </div>
               <div className="flex flex-col justify-center items-center">
                 <p>Or</p>
-                {/* <GoogleLogin></GoogleLogin> */}
-                <button
-                  //   onClick={googleLoginBtn}
-                  className="btn"
-                >
-                  <img
-                    width="48"
-                    height="48"
-                    src="https://img.icons8.com/color/48/google-logo.png"
-                    alt="google-logo"
-                  />
-                  Continue with Google
-                </button>
+                <GoogleLogin></GoogleLogin>
               </div>
 
               {/* <button onClick={handleLogOut} className="btn">Log out</button> */}

@@ -6,7 +6,6 @@ import Loader from "../SharedComponents/Loader";
 
 const Main = () => {
   const { loading } = useAuth();
-  console.log("from main", loading);
   return (
     <div>
       {loading ? (

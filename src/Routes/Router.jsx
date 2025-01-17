@@ -6,6 +6,7 @@ import JoinAsHR from "../Pages/JoinForms/JoinAsHR";
 import Login from "../Pages/JoinForms/Login";
 import Register from "../Pages/JoinForms/Register";
 import ErrorPage from "../SharedComponents/ErrorPage";
+import AllUsers from "../Pages/Admin/allUsers";
 
 const Router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const Router = createBrowserRouter([
       {
         path: "register",
         element: <Register></Register>,
+      },
+      {
+        path: "allUsers",
+        element: <AllUsers></AllUsers>,
       },
     ],
   },

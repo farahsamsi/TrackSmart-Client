@@ -43,6 +43,11 @@ const Navbar = () => {
       <li>
         <NavLink to="/joinAsHR">Join as HR Manager</NavLink>
       </li>
+      {user && (
+        <li>
+          <NavLink to="/allUsers">All Users</NavLink>
+        </li>
+      )}
     </>
   );
   return (
@@ -90,7 +95,7 @@ const Navbar = () => {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-20 rounded-full">
-                  <img alt="" src={user?.photoURL} />
+                  <img referrerPolicy="no-referrer" src={user?.photoURL} />
                 </div>
               </div>
               <ul

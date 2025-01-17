@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 
 import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
+import GoogleLogin from "./GoogleLogin";
 
 const Login = () => {
   const { login } = useAuth();
@@ -16,10 +17,8 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    // console.log(data);
     login(data.email, data.password)
       .then(() => {
-        // console.log("from login page", res.user);
         navigate("/");
         Swal.fire({
           position: "top-end",
@@ -103,19 +102,7 @@ const Login = () => {
               </div>
               <div className="flex flex-col justify-center items-center">
                 <p>Or</p>
-                {/* <GoogleLogin></GoogleLogin> */}
-                <button
-                  //   onClick={googleLoginBtn}
-                  className="btn"
-                >
-                  <img
-                    width="48"
-                    height="48"
-                    src="https://img.icons8.com/color/48/google-logo.png"
-                    alt="google-logo"
-                  />
-                  Continue with Google
-                </button>
+                <GoogleLogin></GoogleLogin>
               </div>
 
               {/* <button onClick={handleLogOut} className="btn">Log out</button> */}
