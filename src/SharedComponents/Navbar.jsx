@@ -5,9 +5,9 @@ import Swal from "sweetalert2";
 import useAdmin from "../Hooks/useAdmin";
 
 const Navbar = () => {
-  const { user, logout, loading } = useAuth();
+  const { user, logout } = useAuth();
   const [isAdmin] = useAdmin();
-  console.log(isAdmin);
+  const isHR = false;
 
   const handleLogout = () => {
     Swal.fire({
@@ -48,15 +48,58 @@ const Navbar = () => {
 
   const links = (
     <>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      <li>
-        <NavLink to="/joinAsEmployee">Join as Employee</NavLink>
-      </li>
-      <li>
-        <NavLink to="/joinAsHR">Join as HR Manager</NavLink>
-      </li>
+      {user ? (
+        isHR ? (
+          <>
+            <li>
+              <NavLink to="/">Home</NavLink>
+            </li>
+            <li>
+              <NavLink to="/allAsset">Asset List</NavLink>
+            </li>
+            <li>
+              <NavLink to="/addAsset">Add an Asset</NavLink>
+            </li>
+            <li>
+              <NavLink to="/allRequest">All Requests</NavLink>
+            </li>
+            <li>
+              <NavLink to="/myEmployee">My Employee List</NavLink>
+            </li>
+          </>
+        ) : (
+          <>
+            {" "}
+            {/* nav links for any employee */}
+            <li>
+              <NavLink to="/">Home</NavLink>
+            </li>
+            <li>
+              <NavLink to="/myAssets">My Assets</NavLink>
+            </li>
+            <li>
+              <NavLink to="/myTeam">My Team</NavLink>
+            </li>
+            <li>
+              <NavLink to="/allAsset">Request for Asset</NavLink>
+            </li>
+          </>
+        )
+      ) : (
+        <>
+          {" "}
+          {/* nav links for non user */}
+          <li>
+            <NavLink to="/">Home</NavLink>
+          </li>
+          <li>
+            <NavLink to="/joinAsEmployee">Join as Employee</NavLink>
+          </li>
+          <li>
+            <NavLink to="/joinAsHR">Join as HR Manager</NavLink>
+          </li>
+        </>
+      )}
     </>
   );
 

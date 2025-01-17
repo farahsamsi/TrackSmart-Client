@@ -96,8 +96,8 @@ const Login = () => {
             <div className="flex flex-col md:flex-row gap-4 justify-around items-center mb-6">
               <div className="flex flex-col justify-center">
                 <p>Do not have an account ?</p>
-                <Link to="/register" className="btn">
-                  <button>Register</button>
+                <Link to="/" className="btn">
+                  <button>Join Now</button>
                 </Link>
               </div>
               <div className="flex flex-col justify-center items-center">
