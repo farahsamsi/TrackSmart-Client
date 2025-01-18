@@ -8,6 +8,8 @@ import Register from "../Pages/JoinForms/Register";
 import ErrorPage from "../SharedComponents/ErrorPage";
 import AllUsers from "../Pages/Admin/allUsers";
 import Payment from "../Pages/Payment/Payment";
+import ProfilePage from "../SharedComponents/ProfilePage";
+import PrivateRoute from "./PrivateRoute";
 
 const Router = createBrowserRouter([
   {
@@ -38,6 +40,16 @@ const Router = createBrowserRouter([
       {
         path: "payment",
         element: <Payment></Payment>,
+      },
+
+      // private routes
+      {
+        path: "profile",
+        element: (
+          <PrivateRoute>
+            <ProfilePage></ProfilePage>
+          </PrivateRoute>
+        ),
       },
 
       // admin routes

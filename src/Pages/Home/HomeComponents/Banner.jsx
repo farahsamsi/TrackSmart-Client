@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 
 import HRImage from "../../../assets/Home page images/joinAsHr.png";
 import employeeImage from "../../../assets/Home page images/joinAsEmployee.png";
+import useAuth from "../../../Hooks/useAuth";
 
 const Banner = () => {
+  const { user } = useAuth();
   return (
     <section className="min-h-[calc(100vh-900px)] pb-12">
       <Carousel autoPlay infiniteLoop>
@@ -20,11 +22,15 @@ const Banner = () => {
                 easy-to-use tools. Track, organize, and stay on top of your
                 team&apos;s needs!
               </p>
-              <Link to="/joinAsHR">
-                <button className="btn btn-outline px-6 font-semibold">
-                  Join as HR Manager
-                </button>
-              </Link>
+              {user ? (
+                ""
+              ) : (
+                <Link to="/joinAsHR">
+                  <button className="btn btn-outline px-6 font-semibold">
+                    Join as HR Manager
+                  </button>
+                </Link>
+              )}
             </div>
             <div className="flex items-center justify-center h-full">
               <img
@@ -45,11 +51,15 @@ const Banner = () => {
                 Request, track, and manage your assets effortlessly. Your
                 one-stop solution for everything you need at work.
               </p>
-              <Link to="/joinAsEmployee">
-                <button className="btn btn-outline px-6 font-semibold">
-                  Join as Employee
-                </button>
-              </Link>
+              {user ? (
+                ""
+              ) : (
+                <Link to="/joinAsEmployee">
+                  <button className="btn btn-outline px-6 font-semibold">
+                    Join as Employee
+                  </button>
+                </Link>
+              )}
             </div>
             <div className="flex items-center justify-center h-full">
               <img

@@ -89,6 +89,7 @@ const CheckoutForm = ({ hrInfo }) => {
                       email: hrInfo.email,
                       transactionId: paymentIntent.id,
                       role: "HR",
+                      company: hrInfo.companyName,
                     };
                     // save user in DB
                     axiosPublic.post("/users", userInfo).then((res) => {
