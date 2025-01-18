@@ -40,6 +40,7 @@ const JoinAsEmployee = () => {
             const userInfo = {
               name: data.name,
               email: data.email,
+              photo: photoURL,
             };
             // save user in DB
             axiosPublic.post("/users", userInfo).then((res) => {

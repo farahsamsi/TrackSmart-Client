@@ -67,10 +67,12 @@ const AuthProvider = ({ children }) => {
         });
       } else {
         //  remove token
-        localStorage.removeItem("access-token");
         setLoading(false);
+        localStorage.removeItem("access-token");
       }
     });
+    // setLoading(false);
+
     return () => {
       return unsubscribe();
     };

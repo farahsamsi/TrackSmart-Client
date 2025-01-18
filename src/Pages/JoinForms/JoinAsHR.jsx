@@ -42,6 +42,7 @@ const JoinAsHR = () => {
         price = 15;
       }
       const HRInfo = { ...data, price, companyLogo };
+
       setHrInfo(HRInfo);
     }
   };

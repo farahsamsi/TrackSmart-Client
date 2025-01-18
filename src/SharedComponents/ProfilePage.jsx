@@ -3,6 +3,7 @@ import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import SectionTitle from "./SectionTitle";
 import { useQuery } from "@tanstack/react-query";
+import { FaBookBookmark } from "react-icons/fa6";
 
 const ProfilePage = () => {
   const { user, updateUserProfile } = useAuth();
@@ -71,6 +72,13 @@ const ProfilePage = () => {
               {profileDetail?.company && (
                 <h2 className="card-title">
                   Company: {profileDetail?.company}
+                </h2>
+              )}
+              {profileDetail?.package && (
+                <h2 className="flex items-center gap-1">
+                  <FaBookBookmark></FaBookBookmark>
+                  Your Package:{" "}
+                  <span className="uppercase">{profileDetail?.package}</span>
                 </h2>
               )}
               {/* action button */}

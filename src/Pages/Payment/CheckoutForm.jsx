@@ -90,6 +90,8 @@ const CheckoutForm = ({ hrInfo }) => {
                       transactionId: paymentIntent.id,
                       role: "HR",
                       company: hrInfo.companyName,
+                      companyLogoImg: hrInfo.companyLogo,
+                      package: hrInfo.package,
                     };
                     // save user in DB
                     axiosPublic.post("/users", userInfo).then((res) => {

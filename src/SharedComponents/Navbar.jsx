@@ -4,12 +4,13 @@ import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
 import useAdmin from "../Hooks/useAdmin";
 import useHR from "../Hooks/useHR";
+import useUser from "../Hooks/useUser";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth(); //from auth
   const [isAdmin] = useAdmin();
   const [isHR] = useHR();
-  // const isHR = false;
+  const [currentUser] = useUser(); //from db
 
   const handleLogout = () => {
     Swal.fire({
@@ -60,13 +61,16 @@ const Navbar = () => {
               <NavLink to="/allAsset">Asset List</NavLink>
             </li>
             <li>
-              <NavLink to="/addAsset">Add an Asset</NavLink>
+              <NavLink to="/addAsset">Add Asset</NavLink>
             </li>
             <li>
               <NavLink to="/allRequest">All Requests</NavLink>
             </li>
             <li>
-              <NavLink to="/myEmployee">My Employee List</NavLink>
+              <NavLink to="/myEmployee">Employees </NavLink>
+            </li>
+            <li>
+              <NavLink to="/addEmployee">Add Employee</NavLink>
             </li>
           </>
         ) : (
@@ -134,8 +138,12 @@ const Navbar = () => {
             </ul>
           </div>
           <Link className="btn btn-ghost flex text-xl">
-            <img src={logo} alt="" />
-            TrackSmart
+            {currentUser?.companyLogoImg ? (
+              <img className="w-10" src={currentUser?.companyLogoImg} alt="" />
+            ) : (
+              <img src={logo} alt="" />
+            )}
+            {currentUser?.company ? <>{currentUser?.company}</> : "TrackSmart"}
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
