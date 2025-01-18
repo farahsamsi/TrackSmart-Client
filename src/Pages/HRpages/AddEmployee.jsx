@@ -3,14 +3,32 @@ import useUser from "../../Hooks/useUser";
 import SectionTitle from "../../SharedComponents/SectionTitle";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { FaUserCircle } from "react-icons/fa";
+import { useState } from "react";
+import Swal from "sweetalert2";
 
 const AddEmployee = () => {
   const axiosSecure = useAxiosSecure();
+  const [currentUser, refetch] = useUser();
 
-  const [currentUser] = useUser();
-  console.log(currentUser);
+  const [selectedMembers, setSelectedMembers] = useState([]);
 
-  const { refetch, data: users = [] } = useQuery({
+  // Function to handle checkbox selection
+  const handleSelectMember = (email) => {
+    setSelectedMembers(
+      (prev) =>
+        prev.includes(email)
+          ? prev.filter((i) => i !== email) // Remove the unselected member
+          : [...prev, email] // Add the newly selected member
+    );
+    // console.log(selectedMembers);
+  };
+
+  //   const addMembersToTeam = () => {
+  //     console.log("members to add", selectedMembers);
+  //   };
+  //   console.log(currentUser);
+
+  const { refetch: usersRefetch, data: users = [] } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axiosSecure.get("/users/available");
@@ -19,26 +37,45 @@ const AddEmployee = () => {
   });
 
   const handleAdd = async (email) => {
+    //   update = employee email addresses
+    // selectUser = info that are passed from hr to employee
+
+    let update = null;
+    if (selectedMembers.length === 0) {
+      update = [email];
+    } else {
+      update = selectedMembers;
+    }
+
+    // employee user info update
     const selectUser = {
       company: currentUser.company,
       companyLogoImg: currentUser.companyLogoImg,
       HRemail: currentUser.email,
     };
-    console.log(selectUser);
+    const res = await axiosSecure.patch(`/updateEmployee`, {
+      update,
+      selectUser,
+    });
 
-    //   const res = await axiosSecure.patch(`/selectUser/${email}`, selectUser);
-
-    const update = {
-      teamMember: email,
-    };
-
+    //   hr userInfo update
     const hrRes = await axiosSecure.patch(
       `/hr/team/${currentUser._id}`,
       update
     );
-    console.log(hrRes);
-
-    // console.log(res.data);
+    if (hrRes.data.modifiedCount > 0 && res.data.modifiedCount > 0) {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your work has been saved",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      refetch();
+      setSelectedMembers([]);
+      usersRefetch();
+    }
+    console.log("hr status", hrRes.data);
   };
 
   return (
@@ -50,19 +87,21 @@ const AddEmployee = () => {
           <span className="uppercase">{currentUser?.package}</span>
         </h1>
         <h1 className="text-xl md:text-2xl">
-          Your employee count: <span className="uppercase">0</span>
+          Your employee count:{" "}
+          <span className="uppercase">{currentUser?.team?.length}</span>
         </h1>
       </div>
 
+      <button className="btn btn-outline my-5" onClick={handleAdd}>
+        Add Selected Members to the Team
+      </button>
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
           <thead>
             <tr>
               <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
+                <label></label>
               </th>
               <th>Name</th>
               <th>Add To Team</th>
@@ -73,7 +112,13 @@ const AddEmployee = () => {
               <tr key={user._id}>
                 <th>
                   <label>
-                    <input type="checkbox" disabled className="checkbox" />
+                    <input
+                      value={user.email}
+                      className="checkbox"
+                      type="checkbox"
+                      checked={selectedMembers.includes(user?.email)}
+                      onChange={(e) => handleSelectMember(e.target.value)}
+                    />
                   </label>
                 </th>
                 <td>
