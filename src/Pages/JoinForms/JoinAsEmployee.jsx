@@ -7,6 +7,9 @@ import GoogleLogin from "./GoogleLogin";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
 const JoinAsEmployee = () => {
   const axiosPublic = useAxiosPublic();
   const { createUser, updateUserProfile } = useAuth();
@@ -19,39 +22,49 @@ const JoinAsEmployee = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    // create user
-    createUser(data.email, data.password)
-      .then(() => {
-        //  profile update
-        updateUserProfile(data.name, data.photoURL).then(() => {
-          const userInfo = {
-            name: data.name,
-            email: data.email,
-          };
-          // save user in DB
-          axiosPublic.post("/users", userInfo).then((res) => {
-            if (res.data.insertedId) {
-              navigate("/");
-              Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Welcome to TrackSmart",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-              reset();
-            }
+  const onSubmit = async (data) => {
+    // image upload to imgbb and then get an url
+    const imageFile = { image: data.image[0] };
+    const res = await axiosPublic.post(image_hosting_api, imageFile, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    if (res.data.success) {
+      const photoURL = res.data.data.display_url;
+      // create user
+      createUser(data.email, data.password)
+        .then(() => {
+          //  profile update
+          updateUserProfile(data.name, photoURL).then(() => {
+            const userInfo = {
+              name: data.name,
+              email: data.email,
+            };
+            // save user in DB
+            axiosPublic.post("/users", userInfo).then((res) => {
+              if (res.data.insertedId) {
+                navigate("/");
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "Welcome to TrackSmart",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                reset();
+              }
+            });
+          });
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `${err.message}`,
           });
         });
-      })
-      .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: `${err.message}`,
-        });
-      });
+    }
   };
 
   return (
@@ -87,15 +100,15 @@ const JoinAsEmployee = () => {
                   <span className="label-text">Profile Photo URL</span>
                 </label>
                 {/* <input
-                  {...register("photo", { required: true })}
-                  type="file"
-                  className="file-input file-input-bordered w-full max-w-xs"
-                /> */}
-                <input
                   type="text"
                   {...register("photoURL", { required: true })}
                   placeholder="enter your photo url"
                   className="input input-bordered"
+                /> */}
+                <input
+                  type="file"
+                  {...register("image", { required: true })}
+                  className="file-input file-input-bordered w-full max-w-xs"
                 />
               </div>
               <div className="form-control">

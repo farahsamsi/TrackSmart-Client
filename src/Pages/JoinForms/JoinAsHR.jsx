@@ -4,8 +4,13 @@ import SectionTitle from "../../SharedComponents/SectionTitle";
 import { FaMoneyBill, FaUser } from "react-icons/fa";
 import { useState } from "react";
 import Payment from "../Payment/Payment";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const JoinAsHR = () => {
+  const axiosPublic = useAxiosPublic();
   const {
     register,
 
@@ -17,20 +22,30 @@ const JoinAsHR = () => {
 
   // TODO : disable input fields when payment page is opened
 
-  const onSubmit = (data) => {
-    let price = 0;
+  const onSubmit = async (data) => {
+    // image upload to imgbb and then get an url
+    const imageFile = { image: data.image[0] };
+    const res = await axiosPublic.post(image_hosting_api, imageFile, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    if (res.data.success) {
+      const companyLogo = res.data.data.display_url;
+      let price = 0;
 
-    if (data.package === "starter") {
-      price = 5;
-    } else if (data.package === "premium") {
-      price = 8;
-    } else {
-      price = 15;
+      if (data.package === "starter") {
+        price = 5;
+      } else if (data.package === "premium") {
+        price = 8;
+      } else {
+        price = 15;
+      }
+      const HRInfo = { ...data, price, companyLogo };
+
+      console.log(HRInfo);
+      setHrInfo(HRInfo);
     }
-    const HRInfo = { ...data, price };
-
-    // console.log(HRInfo);
-    setHrInfo(HRInfo);
   };
   return (
     <div className="pb-9">
@@ -133,13 +148,18 @@ const JoinAsHR = () => {
                     <label className="label">
                       <span className="label-text">Company Logo</span>
                     </label>
-                    <input
+                    {/* <input
                       {...register("companyLogo", { required: true })}
                       type="text"
                       placeholder="companyLogo"
                       className="input input-bordered"
+                    /> */}
+                    <input
+                      type="file"
+                      {...register("image", { required: true })}
+                      className="file-input file-input-bordered w-full max-w-xs"
                     />
-                    {errors.companyLogo && (
+                    {errors.image && (
                       <span className="text-red-700">
                         Please enter your companyLogo
                       </span>
