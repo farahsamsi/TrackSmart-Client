@@ -13,6 +13,7 @@ import PrivateRoute from "./PrivateRoute";
 import AddEmployee from "../Pages/HRpages/AddEmployee";
 import MyEmployees from "../Pages/HRpages/MyEmployees";
 import IncreaseLimit from "../Pages/HRpages/IncreaseLimit";
+import MyTeam from "../Pages/EmployeePages/MyTeam";
 
 const Router = createBrowserRouter([
   {
@@ -54,6 +55,17 @@ const Router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
+      // Employee routes
+      {
+        path: "myTeam",
+        element: (
+          <PrivateRoute>
+            <MyTeam></MyTeam>
+          </PrivateRoute>
+        ),
+      },
+
       // HR routes
       {
         path: "addEmployee",
