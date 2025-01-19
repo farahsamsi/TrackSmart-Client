@@ -33,15 +33,19 @@ const JoinAsHR = () => {
     if (res.data.success) {
       const companyLogo = res.data.data.display_url;
       let price = 0;
+      let teamLimit = 0;
 
       if (data.package === "starter") {
         price = 5;
+        teamLimit = 5;
       } else if (data.package === "premium") {
         price = 8;
+        teamLimit = 10;
       } else {
         price = 15;
+        teamLimit = 20;
       }
-      const HRInfo = { ...data, price, companyLogo };
+      const HRInfo = { ...data, price, teamLimit, companyLogo };
 
       setHrInfo(HRInfo);
     }

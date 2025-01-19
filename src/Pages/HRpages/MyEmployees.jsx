@@ -67,7 +67,9 @@ const MyEmployees = () => {
         </h1>
         <h1 className="text-xl md:text-2xl">
           Your employee count:{" "}
-          <span className="uppercase">{currentUser?.team?.length}</span>
+          <span className="uppercase">
+            {currentUser?.team?.length}/{currentUser?.teamLimit}
+          </span>
         </h1>
       </div>
       <p>HR manager : {currentUser?.name}</p>

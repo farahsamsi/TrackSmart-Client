@@ -5,6 +5,8 @@ import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { FaUserCircle } from "react-icons/fa";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { TfiControlEject } from "react-icons/tfi";
+import { Link } from "react-router-dom";
 
 const AddEmployee = () => {
   const axiosSecure = useAxiosSecure();
@@ -23,11 +25,6 @@ const AddEmployee = () => {
     // console.log(selectedMembers);
   };
 
-  //   const addMembersToTeam = () => {
-  //     console.log("members to add", selectedMembers);
-  //   };
-  //   console.log(currentUser);
-
   const { refetch: usersRefetch, data: users = [] } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
@@ -35,16 +32,29 @@ const AddEmployee = () => {
       return res.data;
     },
   });
-
+  // console.log(currentUser?.team?.length);
+  // console.log(maxEmployee);
   const handleAdd = async (email) => {
     //   update = employee email addresses
     // selectUser = info that are passed from hr to employee
+
+    const currentTeamLength = currentUser?.team?.length || 0;
 
     let update = null;
     if (selectedMembers.length === 0) {
       update = [email];
     } else {
       update = selectedMembers;
+    }
+
+    if (currentTeamLength + update.length > currentUser?.teamLimit) {
+      Swal.fire({
+        title: "Limit Exceeded!",
+        text: `You can not add more than ${currentUser?.teamLimit} employees`,
+        icon: "error",
+      });
+
+      return;
     }
 
     // employee user info update
@@ -75,7 +85,7 @@ const AddEmployee = () => {
       setSelectedMembers([]);
       usersRefetch();
     }
-    console.log("hr status", hrRes.data);
+    // console.log("hr status", hrRes.data);
   };
 
   return (
@@ -86,10 +96,20 @@ const AddEmployee = () => {
           Your Current Package:{" "}
           <span className="uppercase">{currentUser?.package}</span>
         </h1>
-        <h1 className="text-xl md:text-2xl">
-          Your employee count:{" "}
-          <span className="uppercase">{currentUser?.team?.length}</span>
-        </h1>
+        <div className="text-xl md:text-2xl flex gap-5 items-center">
+          <h1>
+            Your employee count:{" "}
+            <span className="uppercase">
+              {currentUser?.team?.length}/{currentUser?.teamLimit}
+            </span>
+          </h1>
+          <Link to="/increaseLimit">
+            <button className="btn btn-xs bg-orange-200 flex items-center">
+              <TfiControlEject className="text-xl" />
+              Increase Limit
+            </button>
+          </Link>
+        </div>
       </div>
 
       <button className="btn btn-outline my-5" onClick={handleAdd}>

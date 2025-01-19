@@ -12,6 +12,7 @@ import ProfilePage from "../SharedComponents/ProfilePage";
 import PrivateRoute from "./PrivateRoute";
 import AddEmployee from "../Pages/HRpages/AddEmployee";
 import MyEmployees from "../Pages/HRpages/MyEmployees";
+import IncreaseLimit from "../Pages/HRpages/IncreaseLimit";
 
 const Router = createBrowserRouter([
   {
@@ -67,6 +68,14 @@ const Router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyEmployees></MyEmployees>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "increaseLimit",
+        element: (
+          <PrivateRoute>
+            <IncreaseLimit></IncreaseLimit>
           </PrivateRoute>
         ),
       },

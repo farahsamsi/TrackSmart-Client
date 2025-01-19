@@ -6,9 +6,11 @@ import PropTypes from "prop-types";
 import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import useUser from "../../Hooks/useUser";
 
 const CheckoutForm = ({ hrInfo }) => {
   const { createUser, updateUserProfile } = useAuth();
+  const [currentUser] = useUser();
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState("");
@@ -77,46 +79,50 @@ const CheckoutForm = ({ hrInfo }) => {
           console.log("payment intent", paymentIntent);
           if (paymentIntent.status === "succeeded") {
             setTransactionId(paymentIntent.id);
-            //   TODO: send transaction id with other 1. hr infos and create hr user in firebase, 2.confirmation button 3.
             //   create user for firebase
-            createUser(hrInfo.email, hrInfo.password)
-              .then(() => {
-                //  profile update
-                updateUserProfile(hrInfo.HRname, hrInfo.companyLogo).then(
-                  () => {
-                    const userInfo = {
-                      name: hrInfo.HRname,
-                      email: hrInfo.email,
-                      transactionId: paymentIntent.id,
-                      role: "HR",
-                      company: hrInfo.companyName,
-                      companyLogoImg: hrInfo.companyLogo,
-                      package: hrInfo.package,
-                    };
-                    // save user in DB
-                    axiosPublic.post("/users", userInfo).then((res) => {
-                      if (res.data.insertedId) {
-                        navigate("/");
-                        Swal.fire({
-                          position: "top-end",
-                          icon: "success",
-                          title: "Welcome to TrackSmart",
-                          showConfirmButton: false,
-                          timer: 1500,
-                        });
-                        //   reset();
-                      }
-                    });
-                  }
-                );
-              })
-              .catch((err) => {
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops...",
-                  text: `${err.message}`,
+            if (!currentUser) {
+              createUser(hrInfo.email, hrInfo.password)
+                .then(() => {
+                  //  profile update
+                  updateUserProfile(hrInfo.HRname, hrInfo.companyLogo).then(
+                    () => {
+                      const userInfo = {
+                        name: hrInfo.HRname,
+                        email: hrInfo.email,
+                        transactionId: paymentIntent.id,
+                        role: "HR",
+                        company: hrInfo.companyName,
+                        companyLogoImg: hrInfo.companyLogo,
+                        package: hrInfo.package,
+                        teamLimit: parseInt(hrInfo.teamLimit),
+                      };
+                      // save user in DB
+                      axiosPublic.post("/users", userInfo).then((res) => {
+                        if (res.data.insertedId) {
+                          navigate("/");
+                          Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "Welcome to TrackSmart",
+                            showConfirmButton: false,
+                            timer: 1500,
+                          });
+                          //   reset();
+                        }
+                      });
+                    }
+                  );
+                })
+                .catch((err) => {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `${err.message}`,
+                  });
                 });
-              });
+            } else {
+              console.log("this payment is for upgrade");
+            }
           }
         }
       }
