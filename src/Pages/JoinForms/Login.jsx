@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import GoogleLogin from "./GoogleLogin";
+import { Helmet } from "react-helmet-async";
 
 const Login = () => {
   const { login } = useAuth();
@@ -38,7 +39,10 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="pb-9 w-11/12 mx-auto">
+      <Helmet>
+        <title>Login | TrackSmart</title>
+      </Helmet>
       <SectionTitle
         heading="Login to Your Account"
         subHeading="Access your dashboard and stay on top of your inventory tasks effortlessly."

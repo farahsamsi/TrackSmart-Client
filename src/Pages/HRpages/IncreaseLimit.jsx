@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import SectionTitle from "../../SharedComponents/SectionTitle";
 import { FaMoneyBill } from "react-icons/fa6";
+import { Helmet } from "react-helmet-async";
 
 const IncreaseLimit = () => {
   const {
@@ -30,6 +31,9 @@ const IncreaseLimit = () => {
 
   return (
     <div className="pb-9 w-11/12 mx-auto">
+      <Helmet>
+        <title>Upgrade Package | TrackSmart</title>
+      </Helmet>
       <SectionTitle heading="Upgrade to increase your team limit "></SectionTitle>
 
       <form onSubmit={handleSubmit(onSubmit)}>

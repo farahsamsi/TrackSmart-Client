@@ -3,6 +3,7 @@ import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import SectionTitle from "../../SharedComponents/SectionTitle";
 import { FaTrashAlt, FaUsers } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -72,6 +73,9 @@ const AllUsers = () => {
 
   return (
     <section className="w-11/12 mx-auto pb-12">
+      <Helmet>
+        <title>All users | TrackSmart</title>
+      </Helmet>
       <SectionTitle
         heading="All Users"
         subHeading="Get a comprehensive overview of all the users associated with your account. Collaborate, track, and manage your team in one centralized platform."

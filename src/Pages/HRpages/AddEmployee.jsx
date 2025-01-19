@@ -7,6 +7,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { TfiControlEject } from "react-icons/tfi";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const AddEmployee = () => {
   const axiosSecure = useAxiosSecure();
@@ -90,6 +91,9 @@ const AddEmployee = () => {
 
   return (
     <div className="pb-9 w-11/12 mx-auto">
+      <Helmet>
+        <title>Add Employees | TrackSmart</title>
+      </Helmet>
       <SectionTitle heading="Add Employee to your Team"></SectionTitle>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
         <h1 className="text-xl md:text-2xl">
@@ -156,6 +160,7 @@ const AddEmployee = () => {
 
                 <th>
                   <button
+                    disabled={selectedMembers?.length > 0}
                     onClick={() => handleAdd(user.email)}
                     className="btn btn-ghost btn-xs text-xl"
                   >

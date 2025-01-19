@@ -5,6 +5,7 @@ import { FaMoneyBill, FaUser } from "react-icons/fa";
 import { useState } from "react";
 import Payment from "../Payment/Payment";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import { Helmet } from "react-helmet-async";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -51,7 +52,10 @@ const JoinAsHR = () => {
     }
   };
   return (
-    <div className="pb-9">
+    <div className="pb-9 w-11/12 mx-auto">
+      <Helmet>
+        <title>Join As HR | TrackSmart</title>
+      </Helmet>
       <SectionTitle
         heading="Make Your HR account"
         subHeading="Select your package and proceed to payment for successful activation"

@@ -4,6 +4,7 @@ import useUser from "../../Hooks/useUser";
 import SectionTitle from "../../SharedComponents/SectionTitle";
 import { FaDeleteLeft } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
 
 const MyEmployees = () => {
   const [currentUser, refetch] = useUser();
@@ -59,6 +60,9 @@ const MyEmployees = () => {
 
   return (
     <div className="pb-9 w-11/12 mx-auto">
+      <Helmet>
+        <title>My Team | TrackSmart</title>
+      </Helmet>
       <SectionTitle heading="Update and watch your Team"></SectionTitle>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
         <h1 className="text-xl md:text-2xl">

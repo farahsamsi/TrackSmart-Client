@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/Home page images/logo.png";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
@@ -11,6 +11,7 @@ const Navbar = () => {
   const [isAdmin] = useAdmin();
   const [isHR] = useHR();
   const [currentUser] = useUser(); //from db
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     Swal.fire({
@@ -25,6 +26,7 @@ const Navbar = () => {
       if (result.isConfirmed) {
         logout()
           .then(() => {
+            navigate("/");
             Swal.fire({
               title: "Logged Out!",
               text: "You are logged out successfully.",

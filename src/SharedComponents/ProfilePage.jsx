@@ -4,6 +4,7 @@ import useAxiosSecure from "../Hooks/useAxiosSecure";
 import SectionTitle from "./SectionTitle";
 import { useQuery } from "@tanstack/react-query";
 import { FaBookBookmark } from "react-icons/fa6";
+import { Helmet } from "react-helmet-async";
 
 const ProfilePage = () => {
   const { user, updateUserProfile } = useAuth();
@@ -42,6 +43,9 @@ const ProfilePage = () => {
 
   return (
     <section className="pb-9 w-11/12 mx-auto">
+      <Helmet>
+        <title>My Profile | TrackSmart</title>
+      </Helmet>
       <SectionTitle heading="My Profile"></SectionTitle>
       <div className="card grid grid-cols-1 md:grid-cols-2 bg-base-100 shadow-xl my-7">
         <figure>
@@ -77,7 +81,7 @@ const ProfilePage = () => {
               {profileDetail?.package && (
                 <h2 className="flex items-center gap-1">
                   <FaBookBookmark></FaBookBookmark>
-                  Your Package:{" "}
+                  Active Package:{" "}
                   <span className="uppercase">{profileDetail?.package}</span>
                 </h2>
               )}

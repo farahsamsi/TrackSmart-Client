@@ -6,6 +6,7 @@ import registerImg from "../../assets/Social Images/register.png";
 import GoogleLogin from "./GoogleLogin";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -69,7 +70,10 @@ const JoinAsEmployee = () => {
   };
 
   return (
-    <div>
+    <div className="pb-9 w-11/12 mx-auto">
+      <Helmet>
+        <title>Join As Employee | TrackSmart</title>
+      </Helmet>
       <SectionTitle
         heading="Create Your Employee Account"
         subHeading="Start your journey to smarter inventory management."
