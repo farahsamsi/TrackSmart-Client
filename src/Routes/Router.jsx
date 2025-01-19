@@ -11,6 +11,7 @@ import Payment from "../Pages/Payment/Payment";
 import ProfilePage from "../SharedComponents/ProfilePage";
 import PrivateRoute from "./PrivateRoute";
 import AddEmployee from "../Pages/HRpages/AddEmployee";
+import MyEmployees from "../Pages/HRpages/MyEmployees";
 
 const Router = createBrowserRouter([
   {
@@ -58,6 +59,14 @@ const Router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <AddEmployee></AddEmployee>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "myEmployee",
+        element: (
+          <PrivateRoute>
+            <MyEmployees></MyEmployees>
           </PrivateRoute>
         ),
       },
