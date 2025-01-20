@@ -12,11 +12,12 @@ const AllAsset = () => {
   const [sort, setSort] = useState(false);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
+  const [isAvailable] = useState(false);
   const [updateAsset, setUpdateAsset] = useState({});
 
   const axiosSecure = useAxiosSecure();
 
-  const [assets, refetch] = useAssets(sort, search, filter);
+  const [assets, refetch] = useAssets(sort, search, filter, isAvailable);
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -51,8 +52,6 @@ const AllAsset = () => {
     e.preventDefault();
     const form = e.target;
     const assetQuantity = parseInt(form.assetQuantity.value);
-
-    console.log("update for", updateAsset?.assetName);
 
     const res = await axiosSecure.patch(`/updateAsset/${updateAsset._id}`, {
       assetQuantity,

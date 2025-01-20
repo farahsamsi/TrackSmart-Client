@@ -16,6 +16,7 @@ import IncreaseLimit from "../Pages/HRpages/IncreaseLimit";
 import MyTeam from "../Pages/EmployeePages/MyTeam";
 import AddAsset from "../Pages/HRpages/AddAsset";
 import AllAsset from "../Pages/HRpages/AllAsset";
+import ReqAsset from "../Pages/EmployeePages/ReqAsset";
 
 const Router = createBrowserRouter([
   {
@@ -64,6 +65,14 @@ const Router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyTeam></MyTeam>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "assets",
+        element: (
+          <PrivateRoute>
+            <ReqAsset></ReqAsset>
           </PrivateRoute>
         ),
       },
