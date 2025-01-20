@@ -35,6 +35,7 @@ const ReqAsset = () => {
   const onSubmit = async () => {
     const today = new Date();
     const assetName = reqAsset?.assetName;
+    const assetType = reqAsset?.assetType;
     const reqEmail = currentUser?.email;
     const reqName = currentUser?.name;
     const assetCompany = currentUser?.company;
@@ -43,6 +44,7 @@ const ReqAsset = () => {
 
     const asset = {
       assetName,
+      assetType,
       reqEmail,
       reqName,
       reqDate,
