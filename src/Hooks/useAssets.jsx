@@ -3,7 +3,7 @@ import useAxiosSecure from "./useAxiosSecure";
 import useUser from "./useUser";
 import { useEffect } from "react";
 
-const useAssets = (sort) => {
+const useAssets = (sort, search, filter) => {
   const axiosSecure = useAxiosSecure();
   const [currentUser] = useUser();
 
@@ -12,7 +12,9 @@ const useAssets = (sort) => {
   const { refetch, data: assets = [] } = useQuery({
     queryKey: [currentUser?.company],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/assets/${company}?sort=${sort}`);
+      const res = await axiosSecure.get(
+        `/assets/${company}?sort=${sort}&search=${search}&filter=${filter}`
+      );
       // console.log(assets);
       return res.data;
     },
@@ -20,7 +22,7 @@ const useAssets = (sort) => {
 
   useEffect(() => {
     refetch();
-  }, [sort]);
+  }, [sort, search, filter]);
 
   return [assets, refetch];
 };
