@@ -1,26 +1,21 @@
 import { Helmet } from "react-helmet-async";
 import SectionTitle from "../../SharedComponents/SectionTitle";
 import { BiSearch } from "react-icons/bi";
-import useEmployeeAssets from "../../Hooks/useEmployeeAssets";
+import { useState } from "react";
+import useCompanyAssets from "../../Hooks/useCompanyAssets";
 import { MdSearch } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
+import { TiTick } from "react-icons/ti";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { useState } from "react";
 
-const MyAssets = () => {
+const AllRequests = () => {
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("");
-  const [pendingApprovedFilter, setPendingApprovedFilter] = useState("");
+  const [companyAssetReq, refetch] = useCompanyAssets(search);
 
-  const [employeeAssets, employeeAssetRefetch] = useEmployeeAssets(
-    search,
-    filter,
-    pendingApprovedFilter
-  );
   const axiosSecure = useAxiosSecure();
 
-  const handleDelete = async (asset) => {
+  const handleReject = async (asset) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -28,15 +23,18 @@ const MyAssets = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Cancel it!",
+      confirmButtonText: "Yes, Reject it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axiosSecure.delete(`/assetReq/${asset?._id}`);
-        if (res.data.deletedCount > 0) {
-          employeeAssetRefetch();
+        const reqStatus = "rejected";
+        const res = await axiosSecure.patch(`/reqAssetUpdate/${asset?._id}`, {
+          reqStatus,
+        });
+        if (res.data.modifiedCount > 0) {
+          refetch();
           Swal.fire({
-            title: "Cancelled!",
-            text: "Your Request has been Cancelled.",
+            title: "Rejected!",
+            text: "Asset Request has been Rejected.",
             icon: "success",
           });
         }
@@ -47,52 +45,26 @@ const MyAssets = () => {
   return (
     <section className="pb-9 w-11/12 mx-auto">
       <Helmet>
-        <title>My Assets | TrackSmart</title>
+        <title>All Requests | TrackSmart</title>
       </Helmet>
       <SectionTitle
-        heading="My Assets"
+        heading="Asset Requests"
         subHeading="Effortlessly track and manage your company assets by adding them to the system."
       ></SectionTitle>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 bg-black/10 p-4 my-6">
-        <h1 className="text-xl md:text-2xl flex items-center gap-2">
+      <div className=" bg-black/10 p-4 my-6">
+        <h1 className="text-xl md:text-2xl flex items-center justify-center gap-2">
           <BiSearch />
           <input
             onKeyUp={(e) => setSearch(e.target.value)}
             type="text"
-            placeholder="Search asset by name"
-            className="input w-full"
+            placeholder="Search requests by requester name or email name"
+            className="input w-full max-w-xl"
           />
           <span className="uppercase"></span>
         </h1>
-        <h1 className="text-xl md:text-2xl">
-          <select
-            onChange={(e) => setFilter(e.target.value)}
-            className="select select-bordered w-full "
-          >
-            <option selected disabled>
-              Filter By Asset Type
-            </option>
-            <option value={""}>View All</option>
-            <option value={"returnable"}>Returnable</option>
-            <option value={"non-returnable"}>Non-Returnable</option>
-          </select>
-        </h1>
-        <h1 className="text-xl md:text-2xl">
-          <select
-            onChange={(e) => setPendingApprovedFilter(e.target.value)}
-            className="select select-bordered w-full "
-          >
-            <option selected disabled>
-              Filter By Status
-            </option>
-            <option value={""}>View All</option>
-            <option value={"pending"}>Pending</option>
-            <option value={"approved"}>Approved</option>
-          </select>
-        </h1>
       </div>
 
-      {employeeAssets?.length === 0 ? (
+      {companyAssetReq?.length === 0 ? (
         <h1 className="text-2xl text-center text-red-700 flex items-center justify-center gap-3">
           <MdSearch />
           No Asset Found
@@ -107,14 +79,17 @@ const MyAssets = () => {
                   <th></th>
                   <th>Asset Name</th>
                   <th>Asset Type</th>
+                  <th>Requester Email</th>
+                  <th>Requested By</th>
                   <th>Request Date</th>
-                  <th>Approval Date</th>
+                  <th>Additional Note</th>
                   <th>Status</th>
-                  <th>Action</th>
+                  <th>Approve</th>
+                  <th>Reject</th>
                 </tr>
               </thead>
               <tbody>
-                {employeeAssets?.map((asset, index) => (
+                {companyAssetReq?.map((asset, index) => (
                   <tr className="hover" key={asset._id}>
                     <td>{index + 1}</td>
                     <td>{asset?.assetName}</td>
@@ -129,25 +104,45 @@ const MyAssets = () => {
                         {asset?.assetType}
                       </span>
                     </td>
+                    <td>{asset?.reqEmail}</td>
+                    <td>{asset?.reqName}</td>
                     <td>{asset?.reqDate}</td>
-                    <td>{asset?.approvalDate}</td>
-
+                    <td>{asset?.reqNotes}</td>
                     <td className={`uppercase`}>
                       <span
                         className={`badge h-auto 
-                            ${asset?.reqStatus == "pending" && "bg-pink-200"}
-                            ${asset?.reqStatus == "rejected" && "bg-red-300"}
-                            ${asset?.reqStatus == "approved" && "bg-green-200"}
-                            ${asset?.reqStatus == "returned" && "bg-blue-200"}
-                            `}
+                                      ${
+                                        asset?.reqStatus == "pending" &&
+                                        "bg-pink-200"
+                                      }
+                                      ${
+                                        asset?.reqStatus == "rejected" &&
+                                        "bg-red-300"
+                                      }
+                                      ${
+                                        asset?.reqStatus == "approved" &&
+                                        "bg-green-200"
+                                      }
+                                      ${
+                                        asset?.reqStatus == "returned" &&
+                                        "bg-blue-200"
+                                      }
+                                      `}
                       >
                         {asset?.reqStatus}
                       </span>
                     </td>
-
                     <th>
                       <button
-                        onClick={() => handleDelete(asset)}
+                        // onClick={() => handleDelete(asset)}
+                        className="btn btn-ghost  text-xl"
+                      >
+                        <TiTick className="text-green-400 text-3xl" />
+                      </button>
+                    </th>
+                    <th>
+                      <button
+                        onClick={() => handleReject(asset)}
                         className="btn btn-ghost  text-xl"
                       >
                         <ImCancelCircle className="text-red-400 text-3xl" />
@@ -164,4 +159,4 @@ const MyAssets = () => {
   );
 };
 
-export default MyAssets;
+export default AllRequests;
