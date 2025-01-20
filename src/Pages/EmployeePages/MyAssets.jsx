@@ -5,16 +5,43 @@ import useEmployeeAssets from "../../Hooks/useEmployeeAssets";
 import { MdSearch } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import { useState } from "react";
 
 const MyAssets = () => {
-  const [employeeAssets, employeeAssetRefetch] = useEmployeeAssets();
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("");
+  const [pendingApprovedFilter, setPendingApprovedFilter] = useState("");
+
+  const [employeeAssets, employeeAssetRefetch] = useEmployeeAssets(
+    search,
+    filter,
+    pendingApprovedFilter
+  );
   const axiosSecure = useAxiosSecure();
 
   const handleDelete = async (asset) => {
-    const res = await axiosSecure.delete(`/assetReq/${asset?._id}`);
-    if (res.data.deletedCount > 0) {
-      employeeAssetRefetch();
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Cancel it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await axiosSecure.delete(`/assetReq/${asset?._id}`);
+        if (res.data.deletedCount > 0) {
+          employeeAssetRefetch();
+          Swal.fire({
+            title: "Cancelled!",
+            text: "Your Request has been Cancelled.",
+            icon: "success",
+          });
+        }
+      }
+    });
   };
 
   return (
@@ -30,7 +57,7 @@ const MyAssets = () => {
         <h1 className="text-xl md:text-2xl flex items-center gap-2">
           <BiSearch />
           <input
-            // onKeyUp={(e) => setSearch(e.target.value)}
+            onKeyUp={(e) => setSearch(e.target.value)}
             type="text"
             placeholder="Search asset by name"
             className="input w-full"
@@ -39,7 +66,7 @@ const MyAssets = () => {
         </h1>
         <h1 className="text-xl md:text-2xl">
           <select
-            // onChange={(e) => setFilter(e.target.value)}
+            onChange={(e) => setFilter(e.target.value)}
             className="select select-bordered w-full "
           >
             <option selected disabled>
@@ -49,20 +76,19 @@ const MyAssets = () => {
             <option value={"returnable"}>Returnable</option>
             <option value={"non-returnable"}>Non-Returnable</option>
           </select>
-          <span className="uppercase"></span>
         </h1>
         <h1 className="text-xl md:text-2xl">
-          <button
-            onClick={() => {
-              //   setIsAvailable(!isAvailable);
-            }}
-            // className={`btn btn-error w-full ${
-            // //   !isAvailable && "!btn-success "
-            // }`}
+          <select
+            onChange={(e) => setPendingApprovedFilter(e.target.value)}
+            className="select select-bordered w-full "
           >
-            {/* {!isAvailable ? "Show Unavailable Assets" : "Show All Assets"} */}
-          </button>
-          <span className="uppercase"></span>
+            <option selected disabled>
+              Filter By Status
+            </option>
+            <option value={""}>View All</option>
+            <option value={"pending"}>Pending</option>
+            <option value={"approved"}>Approved</option>
+          </select>
         </h1>
       </div>
 
