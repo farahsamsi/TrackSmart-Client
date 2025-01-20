@@ -14,6 +14,8 @@ import AddEmployee from "../Pages/HRpages/AddEmployee";
 import MyEmployees from "../Pages/HRpages/MyEmployees";
 import IncreaseLimit from "../Pages/HRpages/IncreaseLimit";
 import MyTeam from "../Pages/EmployeePages/MyTeam";
+import AddAsset from "../Pages/HRpages/AddAsset";
+import AllAsset from "../Pages/HRpages/AllAsset";
 
 const Router = createBrowserRouter([
   {
@@ -88,6 +90,22 @@ const Router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <IncreaseLimit></IncreaseLimit>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "addAsset",
+        element: (
+          <PrivateRoute>
+            <AddAsset></AddAsset>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "allAsset",
+        element: (
+          <PrivateRoute>
+            <AllAsset></AllAsset>
           </PrivateRoute>
         ),
       },
