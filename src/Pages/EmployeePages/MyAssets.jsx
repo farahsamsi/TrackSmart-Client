@@ -44,6 +44,21 @@ const MyAssets = () => {
     });
   };
 
+  const handleReturn = async (asset) => {
+    const reqStatus = "returned";
+    const returnRes = await axiosSecure.patch(`/reqAssetUpdate/${asset?._id}`, {
+      reqStatus,
+    });
+    if (returnRes.data.modifiedCount > 0) {
+      const approved = -1;
+      const res = await axiosSecure.patch(
+        `/updateAsset/${asset?.assetOriginalId}`,
+        { approved }
+      );
+      console.log(res.data);
+    }
+  };
+
   return (
     <section className="pb-9 w-11/12 mx-auto">
       <Helmet>
@@ -130,7 +145,7 @@ const MyAssets = () => {
                       </span>
                     </td>
                     <td>{asset?.reqDate}</td>
-                    <td>{asset?.approvalDate}</td>
+                    <td>{asset?.approvedDate}</td>
 
                     <td className={`uppercase`}>
                       <span
@@ -146,12 +161,33 @@ const MyAssets = () => {
                     </td>
 
                     <th>
-                      <button
-                        onClick={() => handleDelete(asset)}
-                        className="btn btn-ghost  text-xl"
-                      >
-                        <ImCancelCircle className="text-red-400 text-3xl" />
-                      </button>
+                      {asset?.reqStatus === "pending" && (
+                        <button
+                          onClick={() => handleDelete(asset)}
+                          className="btn btn-ghost  text-xl"
+                        >
+                          <ImCancelCircle className="text-red-400 text-3xl" />
+                        </button>
+                      )}
+                      {asset?.reqStatus === "approved" &&
+                        asset?.assetType === "returnable" && (
+                          <button
+                            onClick={() => handleReturn(asset)}
+                            className="btn btn-success btn-xs "
+                          >
+                            Return
+                          </button>
+                        )}
+                      {asset?.reqStatus === "approved" && (
+                        <button className="btn btn-warning btn-xs ">
+                          Print
+                        </button>
+                      )}
+                      {asset?.reqStatus === "returned" && (
+                        <button disabled className="btn btn-success btn-xs ">
+                          Return
+                        </button>
+                      )}
                     </th>
                   </tr>
                 ))}

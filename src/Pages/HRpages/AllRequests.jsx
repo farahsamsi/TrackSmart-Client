@@ -8,6 +8,7 @@ import { ImCancelCircle } from "react-icons/im";
 import { TiTick } from "react-icons/ti";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { format } from "date-fns";
 
 const AllRequests = () => {
   const [search, setSearch] = useState("");
@@ -40,6 +41,45 @@ const AllRequests = () => {
         }
       }
     });
+  };
+
+  const handleApprove = async (asset) => {
+    const findAssetQuantityRes = await axiosSecure.get(
+      `/asset/${asset?.assetOriginalId}`
+    );
+    if (findAssetQuantityRes.data[0].assetQuantity < 1) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Stock Out, can not approve!",
+      });
+      return;
+    }
+
+    const today = new Date();
+    const approvedDate = format(today, "dd-MM-yyyy");
+    const reqStatus = "approved";
+    const statusRes = await axiosSecure.patch(`/reqAssetUpdate/${asset?._id}`, {
+      reqStatus,
+      approvedDate,
+    });
+    if (statusRes.data.modifiedCount > 0) {
+      const approved = 1;
+      const res = await axiosSecure.patch(
+        `/updateAsset/${asset?.assetOriginalId}`,
+        { approved }
+      );
+      if (res.data.modifiedCount > 0) {
+        refetch();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Approved successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    }
   };
 
   return (
@@ -134,7 +174,8 @@ const AllRequests = () => {
                     </td>
                     <th>
                       <button
-                        // onClick={() => handleDelete(asset)}
+                        disabled={asset?.reqStatus === "rejected"}
+                        onClick={() => handleApprove(asset)}
                         className="btn btn-ghost  text-xl"
                       >
                         <TiTick className="text-green-400 text-3xl" />
@@ -142,6 +183,7 @@ const AllRequests = () => {
                     </th>
                     <th>
                       <button
+                        disabled={asset?.reqStatus === "rejected"}
                         onClick={() => handleReject(asset)}
                         className="btn btn-ghost  text-xl"
                       >

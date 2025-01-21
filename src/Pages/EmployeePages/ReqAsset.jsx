@@ -10,6 +10,7 @@ import useUser from "../../Hooks/useUser";
 import { format } from "date-fns";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import useEmployeeAssets from "../../Hooks/useEmployeeAssets";
 
 const ReqAsset = () => {
   const [sort] = useState(false);
@@ -20,6 +21,7 @@ const ReqAsset = () => {
   const [reqNotes, setReqNotes] = useState("");
 
   const [assets] = useAssets(sort, search, filter, isAvailable);
+  const [, employeeAssetRefetch] = useEmployeeAssets();
   const [currentUser] = useUser();
   const axiosSecure = useAxiosSecure();
 
@@ -34,6 +36,7 @@ const ReqAsset = () => {
 
   const onSubmit = async () => {
     const today = new Date();
+    const assetOriginalId = reqAsset?._id;
     const assetName = reqAsset?.assetName;
     const assetType = reqAsset?.assetType;
     const reqEmail = currentUser?.email;
@@ -43,6 +46,7 @@ const ReqAsset = () => {
     const reqStatus = "pending";
 
     const asset = {
+      assetOriginalId,
       assetName,
       assetType,
       reqEmail,
@@ -55,6 +59,7 @@ const ReqAsset = () => {
 
     const res = await axiosSecure.post("/assetReq", asset);
     if (res.data.insertedId) {
+      employeeAssetRefetch();
       document.getElementById(reqAsset?._id).close();
       Swal.fire({
         position: "top-end",
