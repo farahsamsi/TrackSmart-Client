@@ -7,6 +7,7 @@ import { ImCancelCircle } from "react-icons/im";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const MyAssets = () => {
   const [search, setSearch] = useState("");
@@ -179,9 +180,11 @@ const MyAssets = () => {
                           </button>
                         )}
                       {asset?.reqStatus === "approved" && (
-                        <button className="btn btn-warning btn-xs ">
-                          Print
-                        </button>
+                        <Link to={`/approvalDoc/${asset?._id}`}>
+                          <button className="btn btn-warning btn-xs ">
+                            Print
+                          </button>
+                        </Link>
                       )}
                       {asset?.reqStatus === "returned" && (
                         <button disabled className="btn btn-success btn-xs ">

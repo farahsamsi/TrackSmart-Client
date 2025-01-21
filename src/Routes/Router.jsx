@@ -19,6 +19,7 @@ import AllAsset from "../Pages/HRpages/AllAsset";
 import ReqAsset from "../Pages/EmployeePages/ReqAsset";
 import MyAssets from "../Pages/EmployeePages/MyAssets";
 import AllRequests from "../Pages/HRpages/AllRequests";
+import ApprovalDoc from "../Pages/EmployeePages/ApprovalDoc/ApprovalDoc";
 
 const Router = createBrowserRouter([
   {
@@ -85,6 +86,16 @@ const Router = createBrowserRouter([
             <MyAssets></MyAssets>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "approvalDoc/:id",
+        element: (
+          <PrivateRoute>
+            <ApprovalDoc></ApprovalDoc>
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/reqAsset/${params.id}`),
       },
 
       // HR routes
