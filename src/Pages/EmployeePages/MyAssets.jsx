@@ -161,7 +161,7 @@ const MyAssets = () => {
                       </span>
                     </td>
 
-                    <th>
+                    <th className="space-x-1">
                       {asset?.reqStatus === "pending" && (
                         <button
                           onClick={() => handleDelete(asset)}

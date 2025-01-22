@@ -44,6 +44,7 @@ const ReqAsset = () => {
     const assetCompany = currentUser?.company;
     const reqDate = format(today, "dd-MM-yyyy");
     const reqStatus = "pending";
+    const reqCount = 1;
 
     const asset = {
       assetOriginalId,
@@ -60,14 +61,21 @@ const ReqAsset = () => {
     const res = await axiosSecure.post("/assetReq", asset);
     if (res.data.insertedId) {
       employeeAssetRefetch();
-      document.getElementById(reqAsset?._id).close();
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Your Request has been sent",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      axiosSecure
+        .patch(`/updateAsset/${assetOriginalId}`, { reqCount })
+        .then((data) => {
+          if (data.data.modifiedCount > 0) {
+            document.getElementById(reqAsset?._id).close();
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Your Request has been sent",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        })
+        .catch((err) => console.log(err.message));
     }
   };
 

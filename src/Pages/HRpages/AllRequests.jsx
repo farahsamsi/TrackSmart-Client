@@ -174,7 +174,7 @@ const AllRequests = () => {
                     </td>
                     <th>
                       <button
-                        disabled={asset?.reqStatus === "rejected"}
+                        disabled={asset?.reqStatus !== "pending"}
                         onClick={() => handleApprove(asset)}
                         className="btn btn-ghost  text-xl"
                       >
@@ -183,7 +183,7 @@ const AllRequests = () => {
                     </th>
                     <th>
                       <button
-                        disabled={asset?.reqStatus === "rejected"}
+                        disabled={asset?.reqStatus !== "pending"}
                         onClick={() => handleReject(asset)}
                         className="btn btn-ghost  text-xl"
                       >

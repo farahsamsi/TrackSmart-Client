@@ -4,6 +4,7 @@ import Banner from "./HomeComponents/Banner";
 import Packages from "./HomeComponents/Packages";
 import useUser from "../../Hooks/useUser";
 import ContactHR from "../../SharedComponents/ContactHR";
+import PendingReqs from "../EmployeePages/HomeComponents/PendingReqs";
 
 const Home = () => {
   const [currentUser] = useUser();
@@ -14,9 +15,26 @@ const Home = () => {
         <title>Home | TrackSmart</title>
       </Helmet>
       <Banner></Banner>
-      {!currentUser?.company && <ContactHR />}
-      <About></About>
-      {!currentUser && <Packages></Packages>}
+      {/* {currentUser?.company ? "" : <ContactHR />} */}
+
+      {currentUser ? (
+        currentUser?.company ? (
+          currentUser?.role === "HR" ? (
+            ""
+          ) : (
+            <>
+              <PendingReqs />
+            </>
+          )
+        ) : (
+          <ContactHR />
+        )
+      ) : (
+        <>
+          <About></About>
+          <Packages></Packages>
+        </>
+      )}
     </div>
   );
 };
