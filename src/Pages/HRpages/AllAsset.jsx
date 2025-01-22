@@ -13,11 +13,18 @@ const AllAsset = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
   const [isAvailable] = useState(false);
+  const [stockLimited] = useState(false);
   const [updateAsset, setUpdateAsset] = useState({});
 
   const axiosSecure = useAxiosSecure();
 
-  const [assets, refetch] = useAssets(sort, search, filter, isAvailable);
+  const [assets, refetch] = useAssets(
+    sort,
+    search,
+    filter,
+    isAvailable,
+    stockLimited
+  );
 
   const handleDelete = async (id) => {
     Swal.fire({

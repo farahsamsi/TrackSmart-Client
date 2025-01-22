@@ -3,7 +3,7 @@ import useAxiosSecure from "./useAxiosSecure";
 import useUser from "./useUser";
 import { useEffect } from "react";
 
-const useAssets = (sort, search, filter, isAvailable) => {
+const useAssets = (sort, search, filter, isAvailable, stockLimited) => {
   const axiosSecure = useAxiosSecure();
   const [currentUser] = useUser();
 
@@ -13,7 +13,7 @@ const useAssets = (sort, search, filter, isAvailable) => {
     queryKey: [currentUser?.company, sort, search, filter, isAvailable],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/assets/${company}?sort=${sort}&search=${search}&filter=${filter}&isAvailable=${isAvailable}`
+        `/assets/${company}?sort=${sort}&search=${search}&filter=${filter}&isAvailable=${isAvailable}&stockLimited=${stockLimited}`
       );
       // console.log(assets);
       return res.data;
@@ -22,7 +22,7 @@ const useAssets = (sort, search, filter, isAvailable) => {
 
   useEffect(() => {
     refetch();
-  }, [sort, search, filter, isAvailable]);
+  }, [sort, search, filter, isAvailable, stockLimited]);
 
   return [assets, refetch];
 };
