@@ -3,7 +3,7 @@ import useAxiosSecure from "./useAxiosSecure";
 import useUser from "./useUser";
 import { useEffect } from "react";
 
-const useCompanyAssets = (search) => {
+const useCompanyAssets = (search, limit, pendingApprovedFilter) => {
   const axiosSecure = useAxiosSecure();
   const [currentUser] = useUser();
 
@@ -11,7 +11,7 @@ const useCompanyAssets = (search) => {
     queryKey: [currentUser?.company, search],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/companyAssetReq/${currentUser.company}?search=${search}`
+        `/companyAssetReq/${currentUser.company}?search=${search}&pendingApprovedFilter=${pendingApprovedFilter}&limit=${limit}`
       );
       return res.data;
     },
@@ -19,7 +19,7 @@ const useCompanyAssets = (search) => {
 
   useEffect(() => {
     refetch();
-  }, [search]);
+  }, [search, limit, pendingApprovedFilter]);
 
   return [companyAssetReq, refetch];
 };

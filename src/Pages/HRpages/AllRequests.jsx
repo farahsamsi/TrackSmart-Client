@@ -12,7 +12,13 @@ import { format } from "date-fns";
 
 const AllRequests = () => {
   const [search, setSearch] = useState("");
-  const [companyAssetReq, refetch] = useCompanyAssets(search);
+  const limit = "";
+  const pendingApprovedFilter = "";
+  const [companyAssetReq, refetch] = useCompanyAssets(
+    search,
+    limit,
+    pendingApprovedFilter
+  );
 
   const axiosSecure = useAxiosSecure();
 

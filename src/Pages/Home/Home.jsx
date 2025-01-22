@@ -4,7 +4,8 @@ import Banner from "./HomeComponents/Banner";
 import Packages from "./HomeComponents/Packages";
 import useUser from "../../Hooks/useUser";
 import ContactHR from "../../SharedComponents/ContactHR";
-import PendingReqs from "../EmployeePages/HomeComponents/PendingReqs";
+import HRPendingReq from "../HRpages/HRHomeComponents/HRPendingReq";
+import PendingReqs from "../EmployeePages/EmployeeHomeComponents/PendingReqs";
 
 const Home = () => {
   const [currentUser] = useUser();
@@ -20,7 +21,7 @@ const Home = () => {
       {currentUser ? (
         currentUser?.company ? (
           currentUser?.role === "HR" ? (
-            ""
+            <HRPendingReq />
           ) : (
             <>
               <PendingReqs />
