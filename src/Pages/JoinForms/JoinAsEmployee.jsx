@@ -102,14 +102,9 @@ const JoinAsEmployee = () => {
               </div>
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Profile Photo URL</span>
+                  <span className="label-text">Profile Photo</span>
                 </label>
-                {/* <input
-                  type="text"
-                  {...register("photoURL", { required: true })}
-                  placeholder="enter your photo url"
-                  className="input input-bordered"
-                /> */}
+
                 <input
                   type="file"
                   {...register("image", { required: true })}
