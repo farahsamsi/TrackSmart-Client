@@ -13,7 +13,7 @@ const AllAsset = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
   const [isAvailable] = useState(false);
-  const [stockLimited] = useState(false);
+  const stockLimited = false;
   const [updateAsset, setUpdateAsset] = useState({});
 
   const axiosSecure = useAxiosSecure();

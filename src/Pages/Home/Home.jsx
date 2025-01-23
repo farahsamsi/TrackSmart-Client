@@ -7,10 +7,11 @@ import ContactHR from "../../SharedComponents/ContactHR";
 import HRPendingReq from "../HRpages/HRHomeComponents/HRPendingReq";
 import PendingReqs from "../EmployeePages/EmployeeHomeComponents/PendingReqs";
 import LimitedStock from "../HRpages/HRHomeComponents/LimitedStock";
+import TopReqItems from "../HRpages/HRHomeComponents/TopReqItems";
 
 const Home = () => {
   const [currentUser] = useUser();
-  console.log(currentUser);
+
   return (
     <div>
       <Helmet>
@@ -24,6 +25,7 @@ const Home = () => {
           currentUser?.role === "HR" ? (
             <>
               <HRPendingReq />
+              <TopReqItems />
               <LimitedStock />
             </>
           ) : (

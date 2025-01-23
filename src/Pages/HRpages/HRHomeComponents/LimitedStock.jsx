@@ -8,10 +8,8 @@ const LimitedStock = () => {
   const [search] = useState("");
   const [filter] = useState("");
   const [isAvailable] = useState(false);
-  const [stockLimited] = useState(true);
+  const stockLimited = true;
   const [assets] = useAssets(sort, search, filter, isAvailable, stockLimited);
-
-  console.log(assets);
 
   return (
     <section className="py-9">
@@ -23,7 +21,7 @@ const LimitedStock = () => {
         {assets &&
           assets?.map((asset) => (
             <>
-              <Link to="/allAsset" className="w-3/4 mx-auto">
+              <Link to="/allAsset" className="md:w-3/4 mx-auto">
                 <div
                   key={asset?._id}
                   className="indicator  mx-auto hover:scale-105 transition ease-in-out"
