@@ -8,6 +8,7 @@ import HRPendingReq from "../HRpages/HRHomeComponents/HRPendingReq";
 import PendingReqs from "../EmployeePages/EmployeeHomeComponents/PendingReqs";
 import LimitedStock from "../HRpages/HRHomeComponents/LimitedStock";
 import TopReqItems from "../HRpages/HRHomeComponents/TopReqItems";
+import PieChartHR from "../HRpages/HRHomeComponents/PieChartHR";
 
 const Home = () => {
   const [currentUser] = useUser();
@@ -27,6 +28,7 @@ const Home = () => {
               <HRPendingReq />
               <TopReqItems />
               <LimitedStock />
+              <PieChartHR />
             </>
           ) : (
             <>

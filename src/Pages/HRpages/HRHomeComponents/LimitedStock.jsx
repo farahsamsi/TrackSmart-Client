@@ -17,7 +17,7 @@ const LimitedStock = () => {
         heading="Limited Stock"
         subHeading="Keep track of assets running low to ensure timely restocking and uninterrupted resource availability."
       ></SectionTitle>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 w-11/12 mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-11/12 mx-auto">
         {assets &&
           assets?.map((asset) => (
             <>
