@@ -117,7 +117,7 @@ const AddAsset = () => {
                 </select>
               </div>
               <div className="form-control mt-6">
-                <button type="submit" className="btn btn-primary text-white">
+                <button type="submit" className="btn btn-success text-white">
                   <FaFile />
                   Add Asset
                 </button>

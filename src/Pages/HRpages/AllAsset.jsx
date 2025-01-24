@@ -8,8 +8,12 @@ import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { FaFile } from "react-icons/fa";
 import { format } from "date-fns";
+import { TablePagination } from "@mui/material";
 
 const AllAsset = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const [sort, setSort] = useState(false);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
@@ -75,6 +79,15 @@ const AllAsset = () => {
         timer: 1500,
       });
     }
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   return (
@@ -144,92 +157,105 @@ const AllAsset = () => {
                 </tr>
               </thead>
               <tbody>
-                {assets?.map((asset, index) => (
-                  <tr key={asset._id}>
-                    <td>{index + 1}</td>
-                    <td>{asset?.assetName}</td>
-                    <td className={`uppercase`}>
-                      <span
-                        className={`badge h-auto ${
-                          asset?.assetType == "returnable"
-                            ? "bg-green-200"
-                            : "bg-purple-200"
-                        }`}
-                      >
-                        {asset?.assetType}
-                      </span>
-                    </td>
-                    <td>{asset?.assetQuantity}</td>
-                    <td>
-                      {asset?.addedDate &&
-                        format(new Date(asset?.addedDate), "dd-MM-yyyy")}
-                    </td>
+                {assets
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ?.map((asset, index) => (
+                    <tr key={asset._id}>
+                      <td>{index + 1 + page * rowsPerPage}</td>
+                      <td>{asset?.assetName}</td>
+                      <td className={`uppercase`}>
+                        <span
+                          className={`badge h-auto ${
+                            asset?.assetType == "returnable"
+                              ? "bg-green-200"
+                              : "bg-purple-200"
+                          }`}
+                        >
+                          {asset?.assetType}
+                        </span>
+                      </td>
+                      <td>{asset?.assetQuantity}</td>
+                      <td>
+                        {asset?.addedDate &&
+                          format(new Date(asset?.addedDate), "dd-MM-yyyy")}
+                      </td>
 
-                    <th>
-                      <button
-                        onClick={() => handleUpdate(asset)}
-                        className="btn btn-outline  text-xl"
-                      >
-                        <MdEdit className="text-yellow-400 text-3xl" />
-                      </button>
-                      {/* You can open the modal using document.getElementById('ID').showModal() method */}
-                      <dialog id={asset._id} className="modal">
-                        <div className="modal-box">
-                          <form method="dialog">
-                            {/* if there is a button in form, it will close the modal */}
-                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                              ✕
-                            </button>
-                          </form>
-                          <div>
-                            <div className="card bg-base-100 w-full  shrink-0 shadow-2xl">
-                              <form
-                                onSubmit={handleSubmit}
-                                className="card-body"
-                              >
-                                <h1 className="text-center">
-                                  Update {asset?.assetName}
-                                </h1>
-                                <div className="form-control">
-                                  <label className="label">
-                                    <span className="label-text">Quantity</span>
-                                  </label>
-                                  <input
-                                    defaultValue={asset?.assetQuantity}
-                                    type="number"
-                                    name="assetQuantity"
-                                    placeholder="Enter quantity"
-                                    className="input input-bordered"
-                                  />
-                                </div>
+                      <th>
+                        <button
+                          onClick={() => handleUpdate(asset)}
+                          className="btn btn-outline  text-xl"
+                        >
+                          <MdEdit className="text-yellow-400 text-3xl" />
+                        </button>
+                        {/* You can open the modal using document.getElementById('ID').showModal() method */}
+                        <dialog id={asset._id} className="modal">
+                          <div className="modal-box">
+                            <form method="dialog">
+                              {/* if there is a button in form, it will close the modal */}
+                              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                ✕
+                              </button>
+                            </form>
+                            <div>
+                              <div className="card bg-base-100 w-full  shrink-0 shadow-2xl">
+                                <form
+                                  onSubmit={handleSubmit}
+                                  className="card-body"
+                                >
+                                  <h1 className="text-center">
+                                    Update {asset?.assetName}
+                                  </h1>
+                                  <div className="form-control">
+                                    <label className="label">
+                                      <span className="label-text">
+                                        Quantity
+                                      </span>
+                                    </label>
+                                    <input
+                                      defaultValue={asset?.assetQuantity}
+                                      type="number"
+                                      name="assetQuantity"
+                                      placeholder="Enter quantity"
+                                      className="input input-bordered"
+                                    />
+                                  </div>
 
-                                <div className="form-control mt-6">
-                                  <button
-                                    type="submit"
-                                    className="btn btn-primary text-white"
-                                  >
-                                    <FaFile />
-                                    Update
-                                  </button>
-                                </div>
-                              </form>
+                                  <div className="form-control mt-6">
+                                    <button
+                                      type="submit"
+                                      className="btn btn-primary text-white"
+                                    >
+                                      <FaFile />
+                                      Update
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </dialog>
-                    </th>
-                    <th>
-                      <button
-                        onClick={() => handleDelete(asset?._id)}
-                        className="btn btn-outline  text-xl"
-                      >
-                        <MdDelete className="text-red-400 text-3xl" />
-                      </button>
-                    </th>
-                  </tr>
-                ))}
+                        </dialog>
+                      </th>
+                      <th>
+                        <button
+                          onClick={() => handleDelete(asset?._id)}
+                          className="btn btn-outline  text-xl"
+                        >
+                          <MdDelete className="text-red-400 text-3xl" />
+                        </button>
+                      </th>
+                    </tr>
+                  ))}
               </tbody>
             </table>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={assets?.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       )}
