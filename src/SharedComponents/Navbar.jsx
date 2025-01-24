@@ -3,13 +3,13 @@ import logo from "../assets/Home page images/logo.png";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
 import useAdmin from "../Hooks/useAdmin";
-import useHR from "../Hooks/useHR";
+// import useHR from "../Hooks/useHR";
 import useUser from "../Hooks/useUser";
 
 const Navbar = () => {
   const { user, logout } = useAuth(); //from auth
   const [isAdmin] = useAdmin();
-  const [isHR] = useHR();
+  // const [isHR] = useHR();
   const [currentUser] = useUser(); //from db
   const navigate = useNavigate();
 
@@ -54,7 +54,7 @@ const Navbar = () => {
   const links = (
     <>
       {user ? (
-        isHR ? (
+        currentUser?.role === "HR" ? (
           <>
             <li>
               <NavLink to="/">Home</NavLink>
@@ -176,12 +176,9 @@ const Navbar = () => {
                   <li>
                     <Link to="/profile" className="justify-between">
                       Profile
-                      <span className="badge">New</span>
                     </Link>
                   </li>
-                  <li>
-                    <a>Settings</a>
-                  </li>
+
                   <li onClick={handleLogout}>
                     <a>Logout</a>
                   </li>

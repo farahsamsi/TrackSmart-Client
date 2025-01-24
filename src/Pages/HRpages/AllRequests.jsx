@@ -8,6 +8,7 @@ import { ImCancelCircle } from "react-icons/im";
 import { TiTick } from "react-icons/ti";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { format } from "date-fns";
 
 const AllRequests = () => {
   const [search, setSearch] = useState("");
@@ -151,7 +152,10 @@ const AllRequests = () => {
                     </td>
                     <td>{asset?.reqEmail}</td>
                     <td>{asset?.reqName}</td>
-                    <td>{asset?.reqDate}</td>
+                    <td>
+                      {asset?.reqDate &&
+                        format(new Date(asset?.reqDate), "dd-MM-yyyy")}
+                    </td>
                     <td>{asset?.reqNotes}</td>
                     <td className={`uppercase`}>
                       <span

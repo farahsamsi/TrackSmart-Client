@@ -33,8 +33,14 @@ const ApprovalDoc = () => {
             <Text style={[styles.title, styles.textBold]}>
               Company : {assetCompany}
             </Text>
-            <Text>Requested Date : {reqDate}</Text>
-            <Text>Approved Date : {approvedDate}</Text>
+            <Text>
+              Requested Date :{" "}
+              {reqDate && format(new Date(reqDate), "dd-MM-yyyy")}
+            </Text>
+            <Text>
+              Approved Date :{" "}
+              {approvedDate && format(new Date(approvedDate), "dd-MM-yyyy")}
+            </Text>
           </View>
         </View>
 

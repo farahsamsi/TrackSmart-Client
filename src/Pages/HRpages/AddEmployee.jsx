@@ -104,7 +104,7 @@ const AddEmployee = () => {
           <h1>
             Your employee count:{" "}
             <span className="uppercase">
-              {currentUser?.team?.length}/{currentUser?.teamLimit}
+              {currentUser?.team?.length || 0}/{currentUser?.teamLimit}
             </span>
           </h1>
           <Link to="/increaseLimit">

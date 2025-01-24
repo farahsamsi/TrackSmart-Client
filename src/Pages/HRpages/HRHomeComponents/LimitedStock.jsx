@@ -20,7 +20,7 @@ const LimitedStock = () => {
         ></SectionTitle>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-11/12 mx-auto">
           {assets &&
-            assets?.map((asset) => (
+            assets?.slice(0, 4).map((asset) => (
               <>
                 <Link to="/allAsset" className="md:w-3/4 mx-auto">
                   <div

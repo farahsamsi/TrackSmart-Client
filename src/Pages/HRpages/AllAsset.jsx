@@ -7,6 +7,7 @@ import { BiSearch } from "react-icons/bi";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { FaFile } from "react-icons/fa";
+import { format } from "date-fns";
 
 const AllAsset = () => {
   const [sort, setSort] = useState(false);
@@ -159,7 +160,10 @@ const AllAsset = () => {
                       </span>
                     </td>
                     <td>{asset?.assetQuantity}</td>
-                    <td>{asset?.addedDate}</td>
+                    <td>
+                      {asset?.addedDate &&
+                        format(new Date(asset?.addedDate), "dd-MM-yyyy")}
+                    </td>
 
                     <th>
                       <button

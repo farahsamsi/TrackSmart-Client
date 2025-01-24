@@ -95,7 +95,7 @@ const Router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/reqAsset/${params.id}`),
+          fetch(`https://track-smart-server.vercel.app/reqAsset/${params.id}`),
       },
 
       // HR routes

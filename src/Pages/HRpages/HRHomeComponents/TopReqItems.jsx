@@ -3,6 +3,7 @@ import SectionTitle from "../../../SharedComponents/SectionTitle";
 import topReqsImg from "../../../assets/Home page images/topReqs.png";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useUser from "../../../Hooks/useUser";
+import { MdSearch } from "react-icons/md";
 
 const TopReqItems = () => {
   const [topReqs, setTopReqs] = useState([]);
@@ -27,37 +28,44 @@ const TopReqItems = () => {
           <img className="p-4" src={topReqsImg} alt="" />{" "}
         </div>
         <div className=" card-body border rounded-xl p-4 flex items-center justify-center">
-          <div className="overflow-x-auto w-full">
-            <table className="table w-full">
-              {/* head */}
-              <thead className="">
-                <tr>
-                  <th>Asset Name</th>
-                  <th>Type</th>
-                  <th>Req Count</th>
-                </tr>
-              </thead>
-              <tbody>
-                {topReqs.map((asset) => (
-                  <tr key={asset?._id}>
-                    <td>{asset?.assetName}</td>
-                    <td>
-                      <span
-                        className={`badge h-auto ${
-                          asset?.assetType == "returnable"
-                            ? "bg-green-200"
-                            : "bg-purple-200"
-                        }`}
-                      >
-                        {asset?.assetType}
-                      </span>
-                    </td>
-                    <td>{asset?.reqCount} </td>
+          {topReqs?.length < 1 ? (
+            <h1 className="text-2xl text-center text-red-700 flex items-center justify-center gap-3">
+              <MdSearch />
+              No Asset Found
+            </h1>
+          ) : (
+            <div className="overflow-x-auto w-full">
+              <table className="table w-full">
+                {/* head */}
+                <thead className="">
+                  <tr>
+                    <th>Asset Name</th>
+                    <th>Type</th>
+                    <th>Req Count</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {topReqs.map((asset) => (
+                    <tr key={asset?._id}>
+                      <td>{asset?.assetName}</td>
+                      <td>
+                        <span
+                          className={`badge h-auto ${
+                            asset?.assetType == "returnable"
+                              ? "bg-green-200"
+                              : "bg-purple-200"
+                          }`}
+                        >
+                          {asset?.assetType}
+                        </span>
+                      </td>
+                      <td>{asset?.reqCount} </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </section>

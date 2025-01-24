@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import useCompanyAssets from "../../../Hooks/useCompanyAssets";
 import SectionTitle from "../../../SharedComponents/SectionTitle";
+import { MdSearch } from "react-icons/md";
 
 const HRPendingReq = () => {
   const search = "";
@@ -18,8 +19,13 @@ const HRPendingReq = () => {
         subHeading="Review and manage employee requests awaiting your approval to ensure seamless operations."
       ></SectionTitle>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 w-11/12 mx-auto">
-        {companyAssetReq &&
-          companyAssetReq.map((asset) => (
+        {companyAssetReq?.length < 1 ? (
+          <h1 className="text-2xl text-center text-red-700 flex items-center justify-center gap-3 col-span-2 md:col-span-4 lg:col-span-5">
+            <MdSearch />
+            No Request Found
+          </h1>
+        ) : (
+          companyAssetReq?.map((asset) => (
             <>
               <Link to="/allRequest">
                 <div
@@ -70,7 +76,8 @@ const HRPendingReq = () => {
                 </div>
               </Link>
             </>
-          ))}
+          ))
+        )}
       </div>
     </section>
   );

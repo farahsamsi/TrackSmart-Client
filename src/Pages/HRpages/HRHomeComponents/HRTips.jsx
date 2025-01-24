@@ -24,7 +24,6 @@ const HRTips = () => {
 
     fetchTips();
   }, []);
-  console.log(tip);
   return (
     <div className="bg-orange-100 my-9">
       <div className="py-9 w-11/12 mx-auto">

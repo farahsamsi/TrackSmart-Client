@@ -13,9 +13,15 @@ import HRTips from "../HRpages/HRHomeComponents/HRTips";
 import HRTeam from "../HRpages/HRHomeComponents/HRTeam";
 import MonthlyReqs from "../EmployeePages/EmployeeHomeComponents/MonthlyReqs";
 import UpcomingEvents from "../EmployeePages/EmployeeHomeComponents/UpcomingEvents";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const [currentUser] = useUser();
+
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    setUser(currentUser);
+  }, [currentUser]);
 
   return (
     <div>
@@ -25,9 +31,9 @@ const Home = () => {
       <Banner></Banner>
       {/* {currentUser?.company ? "" : <ContactHR />} */}
 
-      {currentUser ? (
-        currentUser?.company ? (
-          currentUser?.role === "HR" ? (
+      {user ? (
+        user?.company ? (
+          user?.role === "HR" ? (
             <>
               <HRPendingReq />
               <TopReqItems />
