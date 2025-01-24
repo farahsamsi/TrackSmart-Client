@@ -3,7 +3,6 @@ import SectionTitle from "../../SharedComponents/SectionTitle";
 import { useForm } from "react-hook-form";
 import addImg from "../../assets/Social Images/addAsset.png";
 import { FaFile } from "react-icons/fa";
-import { format } from "date-fns";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import useUser from "../../Hooks/useUser";
 import Swal from "sweetalert2";
@@ -25,7 +24,7 @@ const AddAsset = () => {
     const today = new Date();
     const addedBy = currentUser?.email;
     const assetCompany = currentUser?.company;
-    const addedDate = format(today, "dd-MM-yyyy");
+    const addedDate = today;
     const assetQuantity = parseInt(data.assetQuantity);
     const assetType = data.assetType;
     const assetName = data.assetName;

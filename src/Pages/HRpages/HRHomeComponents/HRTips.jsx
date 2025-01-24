@@ -28,7 +28,7 @@ const HRTips = () => {
   return (
     <div className="bg-orange-100 my-9">
       <div className="py-9 w-11/12 mx-auto">
-        <SectionTitle heading="HR Management Tips of the Day"></SectionTitle>
+        <SectionTitle heading="HR Tips of the Day"></SectionTitle>
         <div className="flex items-center justify-center">
           <p className="text-gray-700 flex items-center  gap-2 text-xl text-center">
             <FaQuoteLeft className=" " /> {tip || "Loading today's tip..."}{" "}

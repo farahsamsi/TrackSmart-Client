@@ -8,6 +8,7 @@ import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 const MyAssets = () => {
   const [search, setSearch] = useState("");
@@ -145,8 +146,14 @@ const MyAssets = () => {
                         {asset?.assetType}
                       </span>
                     </td>
-                    <td>{asset?.reqDate}</td>
-                    <td>{asset?.approvedDate}</td>
+                    <td>
+                      {asset?.reqDate &&
+                        format(new Date(asset?.reqDate), "dd-MM-yyyy")}
+                    </td>
+                    <td>
+                      {asset?.approvedDate &&
+                        format(new Date(asset?.approvedDate), "dd-MM-yyyy")}
+                    </td>
 
                     <td className={`uppercase`}>
                       <span

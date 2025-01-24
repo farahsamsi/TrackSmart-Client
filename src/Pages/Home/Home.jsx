@@ -11,6 +11,8 @@ import TopReqItems from "../HRpages/HRHomeComponents/TopReqItems";
 import PieChartHR from "../HRpages/HRHomeComponents/PieChartHR";
 import HRTips from "../HRpages/HRHomeComponents/HRTips";
 import HRTeam from "../HRpages/HRHomeComponents/HRTeam";
+import MonthlyReqs from "../EmployeePages/EmployeeHomeComponents/MonthlyReqs";
+import UpcomingEvents from "../EmployeePages/EmployeeHomeComponents/UpcomingEvents";
 
 const Home = () => {
   const [currentUser] = useUser();
@@ -37,6 +39,9 @@ const Home = () => {
           ) : (
             <>
               <PendingReqs />
+              <MonthlyReqs />
+              <HRTips />
+              <UpcomingEvents />
             </>
           )
         ) : (

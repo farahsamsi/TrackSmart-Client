@@ -8,7 +8,6 @@ import { ImCancelCircle } from "react-icons/im";
 import { TiTick } from "react-icons/ti";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { format } from "date-fns";
 
 const AllRequests = () => {
   const [search, setSearch] = useState("");
@@ -63,7 +62,7 @@ const AllRequests = () => {
     }
 
     const today = new Date();
-    const approvedDate = format(today, "dd-MM-yyyy");
+    const approvedDate = today;
     const reqStatus = "approved";
     const statusRes = await axiosSecure.patch(`/reqAssetUpdate/${asset?._id}`, {
       reqStatus,

@@ -7,7 +7,6 @@ import { MdSearch } from "react-icons/md";
 import { VscRequestChanges } from "react-icons/vsc";
 import { useForm } from "react-hook-form";
 import useUser from "../../Hooks/useUser";
-import { format } from "date-fns";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import useEmployeeAssets from "../../Hooks/useEmployeeAssets";
@@ -42,7 +41,7 @@ const ReqAsset = () => {
     const reqEmail = currentUser?.email;
     const reqName = currentUser?.name;
     const assetCompany = currentUser?.company;
-    const reqDate = format(today, "dd-MM-yyyy");
+    const reqDate = today;
     const reqStatus = "pending";
     const reqCount = 1;
 
