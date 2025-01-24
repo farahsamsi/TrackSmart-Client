@@ -5,11 +5,13 @@ import SectionTitle from "../../SharedComponents/SectionTitle";
 import { FaDeleteLeft } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
 
 const MyEmployees = () => {
   const [currentUser, refetch] = useUser();
   const axiosSecure = useAxiosSecure();
   const [myEmployees, setMyEmployees] = useState([]);
+  const location = useLocation();
 
   const getTeamMember = async (emails) => {
     const res = await axiosSecure.post("/getEmployees", { emails });
@@ -60,23 +62,27 @@ const MyEmployees = () => {
 
   return (
     <div className="pb-9 w-11/12 mx-auto">
-      <Helmet>
-        <title>My Team | TrackSmart</title>
-      </Helmet>
-      <SectionTitle heading="Update and watch your Team"></SectionTitle>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
-        <h1 className="text-xl md:text-2xl">
-          Your Current Package:{" "}
-          <span className="uppercase">{currentUser?.package}</span>
-        </h1>
-        <h1 className="text-xl md:text-2xl">
-          Your employee count:{" "}
-          <span className="uppercase">
-            {currentUser?.team?.length}/{currentUser?.teamLimit}
-          </span>
-        </h1>
-      </div>
-      <p>HR manager : {currentUser?.name}</p>
+      {location?.pathname === "/myEmployee" && (
+        <>
+          <Helmet>
+            <title>My Team | TrackSmart</title>
+          </Helmet>
+          <SectionTitle heading="Update and watch your Team"></SectionTitle>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-6">
+            <h1 className="text-xl md:text-2xl">
+              Your Current Package:{" "}
+              <span className="uppercase">{currentUser?.package}</span>
+            </h1>
+            <h1 className="text-xl md:text-2xl">
+              Your employee count:{" "}
+              <span className="uppercase">
+                {currentUser?.team?.length}/{currentUser?.teamLimit}
+              </span>
+            </h1>
+          </div>
+          <p>HR manager : {currentUser?.name}</p>
+        </>
+      )}
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
@@ -87,7 +93,7 @@ const MyEmployees = () => {
               </th>
               <th>Name</th>
               <th>Role</th>
-              <th>Remove</th>
+              {location?.pathname === "/myEmployee" && <th>Remove</th>}
             </tr>
           </thead>
           <tbody>
@@ -108,14 +114,16 @@ const MyEmployees = () => {
                 </td>
                 <td>Employee</td>
 
-                <th>
-                  <button
-                    onClick={() => removeFromTeam(user.email)}
-                    className="btn btn-ghost  text-xl"
-                  >
-                    <FaDeleteLeft className="text-red-400 text-3xl" />
-                  </button>
-                </th>
+                {location?.pathname === "/myEmployee" && (
+                  <th>
+                    <button
+                      onClick={() => removeFromTeam(user.email)}
+                      className="btn btn-ghost  text-xl"
+                    >
+                      <FaDeleteLeft className="text-red-400 text-3xl" />
+                    </button>
+                  </th>
+                )}
               </tr>
             ))}
           </tbody>

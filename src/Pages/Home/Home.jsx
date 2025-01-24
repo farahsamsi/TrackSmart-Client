@@ -10,6 +10,7 @@ import LimitedStock from "../HRpages/HRHomeComponents/LimitedStock";
 import TopReqItems from "../HRpages/HRHomeComponents/TopReqItems";
 import PieChartHR from "../HRpages/HRHomeComponents/PieChartHR";
 import HRTips from "../HRpages/HRHomeComponents/HRTips";
+import HRTeam from "../HRpages/HRHomeComponents/HRTeam";
 
 const Home = () => {
   const [currentUser] = useUser();
@@ -31,6 +32,7 @@ const Home = () => {
               <LimitedStock />
               <PieChartHR />
               <HRTips />
+              <HRTeam />
             </>
           ) : (
             <>
