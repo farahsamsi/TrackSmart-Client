@@ -7,6 +7,7 @@ import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import useUser from "../../Hooks/useUser";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const CheckoutForm = ({ hrInfo }) => {
   const { createUser, updateUserProfile } = useAuth();
@@ -17,6 +18,7 @@ const CheckoutForm = ({ hrInfo }) => {
   const [clientSecret, setClientSecret] = useState("");
   const [transactionId, setTransactionId] = useState("");
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const { price } = hrInfo;
   const navigate = useNavigate();
 
@@ -48,7 +50,7 @@ const CheckoutForm = ({ hrInfo }) => {
       //   console.log("payment error", error);
       setError(error.message);
     } else {
-      console.log("payment method", paymentMethod);
+      // console.log("payment method", paymentMethod);
       setError("");
     }
 
@@ -76,7 +78,7 @@ const CheckoutForm = ({ hrInfo }) => {
         if (confirmError) {
           console.log("confirm error", confirmError);
         } else {
-          console.log("payment intent", paymentIntent);
+          // console.log("payment intent", paymentIntent);
           if (paymentIntent.status === "succeeded") {
             setTransactionId(paymentIntent.id);
             //   create user for firebase
@@ -121,7 +123,24 @@ const CheckoutForm = ({ hrInfo }) => {
                   });
                 });
             } else {
-              console.log("this payment is for upgrade");
+              const upgrade = {
+                package: `${currentUser?.package} +`,
+                teamLimit: parseInt(hrInfo.teamLimit),
+              };
+              const res = await axiosSecure.patch(
+                `/upgradePackage/${hrInfo?.email}`,
+                upgrade
+              );
+              if (res.data.modifiedCount > 0) {
+                navigate("/addEmployee");
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "You have been Upgraded",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+              }
             }
           }
         }
