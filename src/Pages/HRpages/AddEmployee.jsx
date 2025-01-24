@@ -8,8 +8,12 @@ import Swal from "sweetalert2";
 import { TfiControlEject } from "react-icons/tfi";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { TablePagination } from "@mui/material";
 
 const AddEmployee = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const axiosSecure = useAxiosSecure();
   const [currentUser, refetch] = useUser();
 
@@ -23,7 +27,6 @@ const AddEmployee = () => {
           ? prev.filter((i) => i !== email) // Remove the unselected member
           : [...prev, email] // Add the newly selected member
     );
-    // console.log(selectedMembers);
   };
 
   const { refetch: usersRefetch, data: users = [] } = useQuery({
@@ -33,12 +36,7 @@ const AddEmployee = () => {
       return res.data;
     },
   });
-  // console.log(currentUser?.team?.length);
-  // console.log(maxEmployee);
   const handleAdd = async (email) => {
-    //   update = employee email addresses
-    // selectUser = info that are passed from hr to employee
-
     const currentTeamLength = currentUser?.team?.length || 0;
 
     let update = null;
@@ -78,7 +76,7 @@ const AddEmployee = () => {
       Swal.fire({
         position: "top-end",
         icon: "success",
-        title: "Your work has been saved",
+        title: "Team Member has been added",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -86,7 +84,15 @@ const AddEmployee = () => {
       setSelectedMembers([]);
       usersRefetch();
     }
-    // console.log("hr status", hrRes.data);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   return (
@@ -132,45 +138,56 @@ const AddEmployee = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr key={user._id}>
-                <th>
-                  <label>
-                    <input
-                      value={user.email}
-                      className="checkbox"
-                      type="checkbox"
-                      checked={selectedMembers.includes(user?.email)}
-                      onChange={(e) => handleSelectMember(e.target.value)}
-                    />
-                  </label>
-                </th>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle h-12 w-12">
-                        <img src={user?.photo} alt={user?.name} />
+            {users
+              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              ?.map((user) => (
+                <tr key={user._id}>
+                  <th>
+                    <label>
+                      <input
+                        value={user.email}
+                        className="checkbox"
+                        type="checkbox"
+                        checked={selectedMembers.includes(user?.email)}
+                        onChange={(e) => handleSelectMember(e.target.value)}
+                      />
+                    </label>
+                  </th>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div className="avatar">
+                        <div className="mask mask-squircle h-12 w-12">
+                          <img src={user?.photo} alt={user?.name} />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-bold">{user?.name}</div>
                       </div>
                     </div>
-                    <div>
-                      <div className="font-bold">{user?.name}</div>
-                    </div>
-                  </div>
-                </td>
+                  </td>
 
-                <th>
-                  <button
-                    disabled={selectedMembers?.length > 0}
-                    onClick={() => handleAdd(user.email)}
-                    className="btn btn-ghost btn-xs text-xl"
-                  >
-                    <FaUserCircle className="text-orange-400" />
-                  </button>
-                </th>
-              </tr>
-            ))}
+                  <th>
+                    <button
+                      disabled={selectedMembers?.length > 0}
+                      onClick={() => handleAdd(user.email)}
+                      className="btn btn-ghost btn-xs text-xl"
+                    >
+                      <FaUserCircle className="text-orange-400" />
+                    </button>
+                  </th>
+                </tr>
+              ))}
           </tbody>
         </table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={users?.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </div>
     </div>
   );

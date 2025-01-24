@@ -9,8 +9,6 @@ import ContactHR from "../../SharedComponents/ContactHR";
 const MyTeam = () => {
   const [currentUser] = useUser();
   const axiosSecure = useAxiosSecure();
-  // console.log(currentUser);
-  console.log(currentUser);
   let userCompany = currentUser?.company;
 
   const { data: teamMembers } = useQuery({

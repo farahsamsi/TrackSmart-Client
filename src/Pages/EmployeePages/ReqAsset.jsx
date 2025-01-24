@@ -10,8 +10,21 @@ import useUser from "../../Hooks/useUser";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import useEmployeeAssets from "../../Hooks/useEmployeeAssets";
+import { TablePagination } from "@mui/material";
 
 const ReqAsset = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const [sort] = useState(false);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
@@ -148,86 +161,100 @@ const ReqAsset = () => {
                 </tr>
               </thead>
               <tbody>
-                {assets?.map((asset, index) => (
-                  <tr className="hover" key={asset._id}>
-                    <td>{index + 1}</td>
-                    <td>{asset?.assetName}</td>
-                    <td className={`uppercase`}>
-                      <span
-                        className={`badge h-auto ${
-                          asset?.assetType == "returnable"
-                            ? "bg-blue-200"
-                            : "bg-purple-200"
-                        }`}
-                      >
-                        {asset?.assetType}
-                      </span>
-                    </td>
-                    <td>
-                      <span
-                        className={`badge h-auto ${
-                          asset?.assetQuantity > 0
-                            ? "bg-green-200"
-                            : "bg-red-200"
-                        }`}
-                      >
-                        {asset?.assetQuantity > 0
-                          ? "Available"
-                          : "Out of Stock"}
-                      </span>
-                    </td>
+                {assets
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ?.map((asset, index) => (
+                    <tr className="hover" key={asset._id}>
+                      <td>{index + 1 + page * rowsPerPage}</td>
+                      <td>{asset?.assetName}</td>
+                      <td className={`uppercase`}>
+                        <span
+                          className={`badge h-auto ${
+                            asset?.assetType == "returnable"
+                              ? "bg-blue-200"
+                              : "bg-purple-200"
+                          }`}
+                        >
+                          {asset?.assetType}
+                        </span>
+                      </td>
+                      <td>
+                        <span
+                          className={`badge h-auto ${
+                            asset?.assetQuantity > 0
+                              ? "bg-green-200"
+                              : "bg-red-200"
+                          }`}
+                        >
+                          {asset?.assetQuantity > 0
+                            ? "Available"
+                            : "Out of Stock"}
+                        </span>
+                      </td>
 
-                    <th>
-                      <button
-                        disabled={asset?.assetQuantity < 1}
-                        onClick={() => handleReq(asset)}
-                        className="btn btn-ghost  text-xl"
-                      >
-                        <VscRequestChanges className="text-red-400 text-3xl" />
-                      </button>
-                    </th>
+                      <th>
+                        <button
+                          disabled={asset?.assetQuantity < 1}
+                          onClick={() => handleReq(asset)}
+                          className="btn btn-ghost  text-xl"
+                        >
+                          <VscRequestChanges className="text-red-400 text-3xl" />
+                        </button>
+                      </th>
 
-                    <dialog
-                      id={asset?._id}
-                      className="modal modal-bottom sm:modal-middle"
-                    >
-                      <div className="modal-box">
-                        <h3 className="font-bold text-lg text-center mb-5">
-                          Request for {reqAsset?.assetName}
-                        </h3>
-                        <div>
-                          <form
-                            onSubmit={handleSubmit(onSubmit)}
-                            className="grid grid-cols-2 gap-2"
-                          >
-                            <textarea
-                              onKeyUp={(e) => setReqNotes(e.target.value)}
-                              className="textarea textarea-bordered w-full"
-                              placeholder="Enter additional notes"
-                            ></textarea>
-                            <div className="flex flex-col justify-center items-center">
-                              <p className="py-4">
-                                Available Quantity : {reqAsset?.assetQuantity}
-                              </p>
-                              <button type="submit" className="btn btn-success">
-                                Request
-                              </button>
-                            </div>
-                          </form>
+                      <dialog
+                        id={asset?._id}
+                        className="modal modal-bottom sm:modal-middle"
+                      >
+                        <div className="modal-box">
+                          <h3 className="font-bold text-lg text-center mb-5">
+                            Request for {reqAsset?.assetName}
+                          </h3>
+                          <div>
+                            <form
+                              onSubmit={handleSubmit(onSubmit)}
+                              className="grid grid-cols-2 gap-2"
+                            >
+                              <textarea
+                                onKeyUp={(e) => setReqNotes(e.target.value)}
+                                className="textarea textarea-bordered w-full"
+                                placeholder="Enter additional notes"
+                              ></textarea>
+                              <div className="flex flex-col justify-center items-center">
+                                <p className="py-4">
+                                  Available Quantity : {reqAsset?.assetQuantity}
+                                </p>
+                                <button
+                                  type="submit"
+                                  className="btn btn-success"
+                                >
+                                  Request
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                          <div className="divider"></div>
+                          <div className="modal-action">
+                            <form method="dialog">
+                              {/* if there is a button in form, it will close the modal */}
+                              <button className="btn">Close</button>
+                            </form>
+                          </div>
                         </div>
-                        <div className="divider"></div>
-                        <div className="modal-action">
-                          <form method="dialog">
-                            {/* if there is a button in form, it will close the modal */}
-                            <button className="btn">Close</button>
-                          </form>
-                        </div>
-                      </div>
-                    </dialog>
-                  </tr>
-                ))}
+                      </dialog>
+                    </tr>
+                  ))}
               </tbody>
             </table>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={assets?.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       )}

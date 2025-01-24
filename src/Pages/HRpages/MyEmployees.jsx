@@ -6,8 +6,21 @@ import { FaDeleteLeft } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
+import { TablePagination } from "@mui/material";
 
 const MyEmployees = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const [currentUser, refetch] = useUser();
   const axiosSecure = useAxiosSecure();
   const [myEmployees, setMyEmployees] = useState([]);
@@ -97,37 +110,48 @@ const MyEmployees = () => {
             </tr>
           </thead>
           <tbody>
-            {myEmployees[0]?.map((user, index) => (
-              <tr key={user._id}>
-                <th>{index + 1}</th>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle h-12 w-12">
-                        <img src={user?.photo} alt={user?.name} />
+            {myEmployees[0]
+              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              ?.map((user, index) => (
+                <tr key={user._id}>
+                  <th>{index + 1 + page * rowsPerPage}</th>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div className="avatar">
+                        <div className="mask mask-squircle h-12 w-12">
+                          <img src={user?.photo} alt={user?.name} />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-bold">{user?.name}</div>
                       </div>
                     </div>
-                    <div>
-                      <div className="font-bold">{user?.name}</div>
-                    </div>
-                  </div>
-                </td>
-                <td>Employee</td>
+                  </td>
+                  <td>Employee</td>
 
-                {location?.pathname === "/myEmployee" && (
-                  <th>
-                    <button
-                      onClick={() => removeFromTeam(user.email)}
-                      className="btn btn-ghost  text-xl"
-                    >
-                      <FaDeleteLeft className="text-red-400 text-3xl" />
-                    </button>
-                  </th>
-                )}
-              </tr>
-            ))}
+                  {location?.pathname === "/myEmployee" && (
+                    <th>
+                      <button
+                        onClick={() => removeFromTeam(user.email)}
+                        className="btn btn-ghost  text-xl"
+                      >
+                        <FaDeleteLeft className="text-red-400 text-3xl" />
+                      </button>
+                    </th>
+                  )}
+                </tr>
+              ))}
           </tbody>
         </table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={myEmployees[0]?.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </div>
     </div>
   );

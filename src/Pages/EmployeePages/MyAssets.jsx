@@ -9,8 +9,21 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import { TablePagination } from "@mui/material";
 
 const MyAssets = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
   const [pendingApprovedFilter, setPendingApprovedFilter] = useState("");
@@ -57,7 +70,14 @@ const MyAssets = () => {
         `/updateAsset/${asset?.assetOriginalId}`,
         { approved }
       );
-      console.log(res.data);
+      if (res.data.modifiedCount > 0) {
+        employeeAssetRefetch();
+        Swal.fire({
+          title: "Success!",
+          text: "Your Return Request has been send.",
+          icon: "success",
+        });
+      }
     }
   };
 
@@ -131,78 +151,89 @@ const MyAssets = () => {
                 </tr>
               </thead>
               <tbody>
-                {employeeAssets?.map((asset, index) => (
-                  <tr className="hover" key={asset._id}>
-                    <td>{index + 1}</td>
-                    <td>{asset?.assetName}</td>
-                    <td className={`uppercase`}>
-                      <span
-                        className={`badge h-auto ${
-                          asset?.assetType == "returnable"
-                            ? "bg-green-200"
-                            : "bg-purple-200"
-                        }`}
-                      >
-                        {asset?.assetType}
-                      </span>
-                    </td>
-                    <td>
-                      {asset?.reqDate &&
-                        format(new Date(asset?.reqDate), "dd-MM-yyyy")}
-                    </td>
-                    <td>
-                      {asset?.approvedDate &&
-                        format(new Date(asset?.approvedDate), "dd-MM-yyyy")}
-                    </td>
+                {employeeAssets
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ?.map((asset, index) => (
+                    <tr className="hover" key={asset._id}>
+                      <td>{index + 1 + page * rowsPerPage}</td>
+                      <td>{asset?.assetName}</td>
+                      <td className={`uppercase`}>
+                        <span
+                          className={`badge h-auto ${
+                            asset?.assetType == "returnable"
+                              ? "bg-green-200"
+                              : "bg-purple-200"
+                          }`}
+                        >
+                          {asset?.assetType}
+                        </span>
+                      </td>
+                      <td>
+                        {asset?.reqDate &&
+                          format(new Date(asset?.reqDate), "dd-MM-yyyy")}
+                      </td>
+                      <td>
+                        {asset?.approvedDate &&
+                          format(new Date(asset?.approvedDate), "dd-MM-yyyy")}
+                      </td>
 
-                    <td className={`uppercase`}>
-                      <span
-                        className={`badge h-auto 
+                      <td className={`uppercase`}>
+                        <span
+                          className={`badge h-auto 
                             ${asset?.reqStatus == "pending" && "bg-pink-200"}
                             ${asset?.reqStatus == "rejected" && "bg-red-300"}
                             ${asset?.reqStatus == "approved" && "bg-green-200"}
                             ${asset?.reqStatus == "returned" && "bg-blue-200"}
                             `}
-                      >
-                        {asset?.reqStatus}
-                      </span>
-                    </td>
-
-                    <th className="space-x-1">
-                      {asset?.reqStatus === "pending" && (
-                        <button
-                          onClick={() => handleDelete(asset)}
-                          className="btn btn-ghost  text-xl"
                         >
-                          <ImCancelCircle className="text-red-400 text-3xl" />
-                        </button>
-                      )}
-                      {asset?.reqStatus === "approved" &&
-                        asset?.assetType === "returnable" && (
+                          {asset?.reqStatus}
+                        </span>
+                      </td>
+
+                      <th className="space-x-1">
+                        {asset?.reqStatus === "pending" && (
                           <button
-                            onClick={() => handleReturn(asset)}
-                            className="btn btn-success btn-xs "
+                            onClick={() => handleDelete(asset)}
+                            className="btn btn-ghost  text-xl"
                           >
+                            <ImCancelCircle className="text-red-400 text-3xl" />
+                          </button>
+                        )}
+                        {asset?.reqStatus === "approved" &&
+                          asset?.assetType === "returnable" && (
+                            <button
+                              onClick={() => handleReturn(asset)}
+                              className="btn btn-success btn-xs "
+                            >
+                              Return
+                            </button>
+                          )}
+                        {asset?.reqStatus === "approved" && (
+                          <Link to={`/approvalDoc/${asset?._id}`}>
+                            <button className="btn btn-warning btn-xs ">
+                              Print
+                            </button>
+                          </Link>
+                        )}
+                        {asset?.reqStatus === "returned" && (
+                          <button disabled className="btn btn-success btn-xs ">
                             Return
                           </button>
                         )}
-                      {asset?.reqStatus === "approved" && (
-                        <Link to={`/approvalDoc/${asset?._id}`}>
-                          <button className="btn btn-warning btn-xs ">
-                            Print
-                          </button>
-                        </Link>
-                      )}
-                      {asset?.reqStatus === "returned" && (
-                        <button disabled className="btn btn-success btn-xs ">
-                          Return
-                        </button>
-                      )}
-                    </th>
-                  </tr>
-                ))}
+                      </th>
+                    </tr>
+                  ))}
               </tbody>
             </table>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={employeeAssets?.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       )}

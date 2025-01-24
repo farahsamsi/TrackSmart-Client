@@ -8,7 +8,7 @@ const ApprovalDoc = () => {
   const [reqAsset] = useLoaderData();
   const today = new Date();
   const printDate = format(today, "dd-MM-yyyy");
-  console.log(reqAsset);
+
   const {
     reqStatus,
     reqNotes,

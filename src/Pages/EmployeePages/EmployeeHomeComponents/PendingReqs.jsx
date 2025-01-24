@@ -13,7 +13,6 @@ const PendingReqs = () => {
     filter,
     pendingApprovedFilter
   );
-  //   console.log(employeeAssets);
   const axiosSecure = useAxiosSecure();
 
   const handleDelete = async (asset) => {

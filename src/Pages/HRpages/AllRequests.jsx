@@ -9,8 +9,21 @@ import { TiTick } from "react-icons/ti";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
+import { TablePagination } from "@mui/material";
 
 const AllRequests = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const [search, setSearch] = useState("");
   const limit = "";
   const pendingApprovedFilter = "";
@@ -135,31 +148,33 @@ const AllRequests = () => {
                 </tr>
               </thead>
               <tbody>
-                {companyAssetReq?.map((asset, index) => (
-                  <tr className="hover" key={asset._id}>
-                    <td>{index + 1}</td>
-                    <td>{asset?.assetName}</td>
-                    <td className={`uppercase`}>
-                      <span
-                        className={`badge h-auto ${
-                          asset?.assetType == "returnable"
-                            ? "bg-green-200"
-                            : "bg-purple-200"
-                        }`}
-                      >
-                        {asset?.assetType}
-                      </span>
-                    </td>
-                    <td>{asset?.reqEmail}</td>
-                    <td>{asset?.reqName}</td>
-                    <td>
-                      {asset?.reqDate &&
-                        format(new Date(asset?.reqDate), "dd-MM-yyyy")}
-                    </td>
-                    <td>{asset?.reqNotes}</td>
-                    <td className={`uppercase`}>
-                      <span
-                        className={`badge h-auto 
+                {companyAssetReq
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  ?.map((asset, index) => (
+                    <tr className="hover" key={asset._id}>
+                      <td>{index + 1 + page * rowsPerPage}</td>
+                      <td>{asset?.assetName}</td>
+                      <td className={`uppercase`}>
+                        <span
+                          className={`badge h-auto ${
+                            asset?.assetType == "returnable"
+                              ? "bg-green-200"
+                              : "bg-purple-200"
+                          }`}
+                        >
+                          {asset?.assetType}
+                        </span>
+                      </td>
+                      <td>{asset?.reqEmail}</td>
+                      <td>{asset?.reqName}</td>
+                      <td>
+                        {asset?.reqDate &&
+                          format(new Date(asset?.reqDate), "dd-MM-yyyy")}
+                      </td>
+                      <td>{asset?.reqNotes}</td>
+                      <td className={`uppercase`}>
+                        <span
+                          className={`badge h-auto 
                                       ${
                                         asset?.reqStatus == "pending" &&
                                         "bg-pink-200"
@@ -177,32 +192,41 @@ const AllRequests = () => {
                                         "bg-blue-200"
                                       }
                                       `}
-                      >
-                        {asset?.reqStatus}
-                      </span>
-                    </td>
-                    <th>
-                      <button
-                        disabled={asset?.reqStatus !== "pending"}
-                        onClick={() => handleApprove(asset)}
-                        className="btn btn-ghost  text-xl"
-                      >
-                        <TiTick className="text-green-400 text-3xl" />
-                      </button>
-                    </th>
-                    <th>
-                      <button
-                        disabled={asset?.reqStatus !== "pending"}
-                        onClick={() => handleReject(asset)}
-                        className="btn btn-ghost  text-xl"
-                      >
-                        <ImCancelCircle className="text-red-400 text-3xl" />
-                      </button>
-                    </th>
-                  </tr>
-                ))}
+                        >
+                          {asset?.reqStatus}
+                        </span>
+                      </td>
+                      <th>
+                        <button
+                          disabled={asset?.reqStatus !== "pending"}
+                          onClick={() => handleApprove(asset)}
+                          className="btn btn-ghost  text-xl"
+                        >
+                          <TiTick className="text-green-400 text-3xl" />
+                        </button>
+                      </th>
+                      <th>
+                        <button
+                          disabled={asset?.reqStatus !== "pending"}
+                          onClick={() => handleReject(asset)}
+                          className="btn btn-ghost  text-xl"
+                        >
+                          <ImCancelCircle className="text-red-400 text-3xl" />
+                        </button>
+                      </th>
+                    </tr>
+                  ))}
               </tbody>
             </table>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={companyAssetReq?.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       )}

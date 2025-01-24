@@ -16,11 +16,16 @@ import UpcomingEvents from "../EmployeePages/EmployeeHomeComponents/UpcomingEven
 import { useEffect, useState } from "react";
 
 const Home = () => {
-  const [currentUser] = useUser();
+  const [currentUser, refetch] = useUser();
 
   const [user, setUser] = useState({});
   useEffect(() => {
-    setUser(currentUser);
+    refetch();
+    if (currentUser) {
+      setUser(currentUser);
+    } else {
+      setUser(null);
+    }
   }, [currentUser]);
 
   return (
@@ -31,7 +36,7 @@ const Home = () => {
       <Banner></Banner>
       {/* {currentUser?.company ? "" : <ContactHR />} */}
 
-      {user ? (
+      {currentUser?.name ? (
         user?.company ? (
           user?.role === "HR" ? (
             <>
