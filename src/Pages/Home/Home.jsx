@@ -16,6 +16,7 @@ import UpcomingEvents from "../EmployeePages/EmployeeHomeComponents/UpcomingEven
 import { useEffect, useState } from "react";
 import KeyFeatures from "./HomeComponents/KeyFeatures";
 import AssetCategories from "./HomeComponents/AssetCategories";
+import SuccessStories from "./HomeComponents/SuccessStories";
 
 const Home = () => {
   const [currentUser, refetch] = useUser();
@@ -66,6 +67,7 @@ const Home = () => {
           <Packages></Packages>
           <KeyFeatures />
           <AssetCategories />
+          <SuccessStories />
         </>
       )}
     </div>
