@@ -14,6 +14,7 @@ import HRTeam from "../HRpages/HRHomeComponents/HRTeam";
 import MonthlyReqs from "../EmployeePages/EmployeeHomeComponents/MonthlyReqs";
 import UpcomingEvents from "../EmployeePages/EmployeeHomeComponents/UpcomingEvents";
 import { useEffect, useState } from "react";
+import KeyFeatures from "./HomeComponents/KeyFeatures";
 
 const Home = () => {
   const [currentUser, refetch] = useUser();
@@ -62,6 +63,7 @@ const Home = () => {
         <>
           <About></About>
           <Packages></Packages>
+          <KeyFeatures />
         </>
       )}
     </div>
