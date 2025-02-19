@@ -91,6 +91,11 @@ const Navbar = () => {
             <li>
               <NavLink to="/assets">Request for Asset</NavLink>
             </li>
+            <li>
+              <NavLink to="/profile" className="justify-between">
+                Profile
+              </NavLink>
+            </li>
           </>
         )
       ) : (

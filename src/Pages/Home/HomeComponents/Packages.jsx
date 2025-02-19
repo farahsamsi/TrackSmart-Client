@@ -39,9 +39,9 @@ const Packages = () => {
               <p className="text-gray-500">Enjoy basic features.</p>
               <p className="text-3xl font-extrabold text-gray-800">$ 5</p>
             </div>
-            <button className="mt-4 btn btn-outline text-lg font-medium rounded-md transition">
+            {/* <button className="mt-4 btn btn-outline text-lg font-medium rounded-md transition">
               Select Package →
-            </button>
+            </button> */}
             <p className="mt-2 text-sm text-gray-500">
               Invoices and receipts available
             </p>
@@ -75,9 +75,9 @@ const Packages = () => {
               <p className="text-gray-500">Enjoy Premium features.</p>
               <p className="text-3xl font-extrabold text-gray-800">$ 8</p>
             </div>
-            <button className="mt-4 btn btn-outline text-lg font-medium rounded-md transition">
+            {/* <button className="mt-4 btn btn-outline text-lg font-medium rounded-md transition">
               Select Package →
-            </button>
+            </button> */}
             <p className="mt-2 text-sm text-gray-500">
               Invoices and receipts available
             </p>
@@ -112,9 +112,9 @@ const Packages = () => {
               <p className="text-gray-500">Enjoy Elite features.</p>
               <p className="text-3xl font-extrabold text-gray-800">$ 15</p>
             </div>
-            <button className="mt-4 btn btn-outline text-lg font-medium rounded-md transition">
+            {/* <button className="mt-4 btn btn-outline text-lg font-medium rounded-md transition">
               Select Package →
-            </button>
+            </button> */}
             <p className="mt-2 text-sm text-gray-500">
               Invoices and receipts available
             </p>

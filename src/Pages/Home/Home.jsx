@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import KeyFeatures from "./HomeComponents/KeyFeatures";
 import AssetCategories from "./HomeComponents/AssetCategories";
 import SuccessStories from "./HomeComponents/SuccessStories";
+import FAQ from "./HomeComponents/FAQ";
 
 const Home = () => {
   const [currentUser, refetch] = useUser();
@@ -68,6 +69,7 @@ const Home = () => {
           <KeyFeatures />
           <AssetCategories />
           <SuccessStories />
+          <FAQ />
         </>
       )}
     </div>
